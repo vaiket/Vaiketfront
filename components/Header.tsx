@@ -172,7 +172,8 @@ export default function Header() {
               whileTap={{ scale: 0.95 }}
               className="rounded-2xl bg-gradient-to-r from-teal-400 to-sky-500 px-6 py-3 text-sm font-bold text-white shadow-2xl transition-all duration-300 hover:from-teal-500 hover:to-sky-600 relative overflow-hidden group"
             >
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center gap-2"
+                onClick={() => window.location.href = "https://vaiket.com/#pricing"} >
                 Get Started Free
                 <motion.span
                   animate={{ x: [0, 4, 0] }}
