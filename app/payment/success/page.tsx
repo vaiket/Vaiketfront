@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function PaymentSuccess() {
+function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("Verifying payment...");
@@ -23,21 +23,29 @@ export default function PaymentSuccess() {
       if (data.success) {
         setMessage("🎉 Payment Successful! Subscription Activated.");
       } else {
-        setMessage("⚠ Failed to verify payment. Contact support.");
+        setMessage("⚠ Payment verification failed. Contact support.");
       }
 
       setLoading(false);
     };
 
     verifyPayment();
-  }, []);
+  }, [searchParams]);
 
   return (
-    <div style={{ padding: 50, textAlign: "center" }}>
+    <div style={{ padding: 50, textAlign: "center", color: "white" }}>
       <h1>{loading ? "Verifying..." : message}</h1>
-      <a href="/" style={{ marginTop: 20, display: "inline-block" }}>
+      <a href="/" style={{ marginTop: 20, display: "inline-block", color: "#4ade80" }}>
         Go to Home →
       </a>
     </div>
+  );
+}
+
+export default function PaymentSuccess() {
+  return (
+    <Suspense fallback={<div style={{ color: "white", padding: 50 }}>Loading...</div>}>
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }
