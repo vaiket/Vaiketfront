@@ -159,6 +159,7 @@ export default function Header() {
               }}
               whileTap={{ scale: 0.95 }}
               className="rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/20 px-6 py-3 text-sm font-semibold text-white shadow-xl transition-all duration-300 hover:bg-white/20 hover:border-white/30"
+              onClick={() => window.location.href = "https://ai.vaiket.com/login"}
             >
               Sign In
             </motion.button>
