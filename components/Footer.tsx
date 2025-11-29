@@ -46,6 +46,8 @@ const footerContent = {
     // Product Links
     productLinks: [
       "AI Email Automation",
+      "WhatsApp CRM",
+      "Instagram DM Automation",
       "Conversation Inbox",
       "Workflow Builder",
       "Template Library",
