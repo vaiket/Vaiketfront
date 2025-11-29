@@ -87,11 +87,11 @@ export default function Header() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-sky-500 rounded-2xl blur-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse" />
+              <div className="" />
               <img
                 src="/logo.png"
                 alt="AI Email Automation Platform"
-                className="relative h-8 w-auto md:h-10 lg:h-12 drop-shadow-2xl transition-all duration-300 transform group-hover:rotate-3"
+                className="relative h-35 w-auto md:h-35 lg:h-35 drop-shadow-2xl transition-all duration-300 transform group-hover:rotate-3"
               />
             </div>
             <motion.div
@@ -99,10 +99,10 @@ export default function Header() {
               animate={{ opacity: 1, x: 0 }}
               className="hidden lg:block"
             >
-              <span className="text-white font-bold text-xl bg-gradient-to-r from-teal-300 to-sky-400 bg-clip-text text-transparent">
-                EmailAI
+              <span className="">
+                
               </span>
-              <div className="h-1 w-8 bg-gradient-to-r from-teal-400 to-sky-500 rounded-full mt-1 transform group-hover:scale-125 transition-transform duration-300" />
+              <div className="" />
             </motion.div>
           </motion.div>
 
