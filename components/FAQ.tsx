@@ -5,11 +5,11 @@ import { useState } from "react";
 import { Plus, Minus, Mail, Brain, Shield, CreditCard, Smartphone, Users, HelpCircle, MessageCircle } from "lucide-react";
 
 export default function FAQSection() {
-  const [openIndex, setOpenIndex] = useState(null);
+ const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const toggleFAQ = (index: number) => {
+  setOpenIndex(openIndex === index ? null : index);
+};
 
   const faqs = [
     {

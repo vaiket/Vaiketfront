@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import {
   Mail,
   Brain,
@@ -9,7 +9,6 @@ import {
   Activity,
   Inbox,
   Workflow,
-  Lock,
 } from "lucide-react";
 
 export default function FeaturesSection() {
@@ -72,38 +71,32 @@ export default function FeaturesSection() {
     },
   ];
 
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+      transition: { staggerChildren: 0.1 },
+    },
   };
 
-  const item = {
+  const item: Variants = {
     hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.25, 0.1, 0.25, 1],
+      },
+    },
   };
 
   return (
     <section className="relative bg-black text-white py-32 px-6 overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Background lights */}
+      <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-500" />
-        
-        {/* Grid pattern */}
-        <div 
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-            backgroundSize: '50px 50px',
-          }}
-        />
       </div>
 
       <div className="max-w-7xl mx-auto text-center mb-20 relative">
@@ -112,10 +105,9 @@ export default function FeaturesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6"
+          className="text-zinc-300 text-sm mb-4"
         >
-          <div className="w-2 h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse" />
-          <span className="text-sm text-zinc-300">AI-Powered Business Suite</span>
+          AI-Powered Business Suite
         </motion.div>
 
         <motion.h2
@@ -123,30 +115,10 @@ export default function FeaturesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
           viewport={{ once: true }}
-          className="text-5xl md:text-7xl font-bold mb-8"
+          className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
         >
-          <span className="bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent">
-            Supercharge Your
-          </span>
-          <br />
-          <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-            Business Communication
-          </span>
+          Supercharge Your Business Communication
         </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="text-xl text-zinc-400 max-w-4xl mx-auto leading-relaxed"
-        >
-          Transform your email into an intelligent business growth engine with 
-          <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent font-semibold">
-            {" "}AI-powered automation
-          </span>{" "}
-          and enterprise-grade security.
-        </motion.p>
       </div>
 
       <motion.div
@@ -160,68 +132,29 @@ export default function FeaturesSection() {
           <motion.div
             key={index}
             variants={item}
-            className="group relative p-8 rounded-3xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 
-                       backdrop-blur-xl hover:backdrop-blur-2xl transition-all duration-500
-                       hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20"
-            whileHover={{ 
-              y: -8,
-              transition: { duration: 0.3, ease: "easeOut" }
+            whileHover={{
+              y: -6,
+              transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
             }}
+            className="group relative p-8 rounded-3xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 
+                       backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:shadow-xl
+                       hover:shadow-purple-500/20"
           >
-            {/* Hover gradient overlay */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${feature.bgGradient} opacity-0 group-hover:opacity-100 rounded-3xl transition-all duration-500`} />
-            
-            {/* Animated border gradient */}
-            <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-100 transition-all duration-500 p-px`}>
-              <div className="w-full h-full bg-black rounded-3xl" />
-            </div>
+            <div
+              className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${feature.bgGradient} opacity-0 group-hover:opacity-100 transition-all duration-500`}
+            />
 
             <div className="relative z-10">
-              <div className={`mb-6 p-4 rounded-2xl bg-gradient-to-r ${feature.gradient} w-fit group-hover:scale-110 transition-transform duration-300`}>
-                <div className="text-white">
-                  {feature.icon}
-                </div>
+              <div className={`mb-6 p-4 rounded-2xl bg-gradient-to-r ${feature.gradient} w-fit`}>
+                {feature.icon}
               </div>
-              
-              <h3 className="text-xl font-bold mb-4 text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/80 group-hover:bg-clip-text transition-all duration-300">
-                {feature.title}
-              </h3>
-              
-              <p className="text-zinc-400 group-hover:text-zinc-300 leading-relaxed transition-colors duration-300">
-                {feature.desc}
-              </p>
 
-              {/* Hover indicator */}
-              <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <div className="w-2 h-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full animate-ping" />
-              </div>
+              <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
+              <p className="text-zinc-400 leading-relaxed">{feature.desc}</p>
             </div>
           </motion.div>
         ))}
       </motion.div>
-
-      {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/30 rounded-full"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </div>
     </section>
   );
 }

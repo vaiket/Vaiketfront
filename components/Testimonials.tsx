@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Star, Quote, TrendingUp, Users, Zap } from "lucide-react";
 
 export default function TestimonialsSection() {
@@ -30,31 +30,32 @@ export default function TestimonialsSection() {
     { value: "500+", label: "Happy Customers", icon: Users },
   ];
 
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
-  const item = {
+  const item: Variants = {
     hidden: { opacity: 0, y: 20 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.5,
-        ease: "easeOut"
-      } 
-    }
+        ease: [0.25, 0.1, 0.25, 1], // ✔ TypeScript-safe easing
+      },
+    },
   };
 
   return (
     <section className="relative bg-black py-20 px-4">
       <div className="max-w-7xl mx-auto">
+
         {/* Header */}
         <div className="text-center mb-16">
           <motion.h2
@@ -66,6 +67,7 @@ export default function TestimonialsSection() {
           >
             Trusted by Growing Businesses
           </motion.h2>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -77,7 +79,7 @@ export default function TestimonialsSection() {
           </motion.p>
         </div>
 
-        {/* Stats Grid */}
+        {/* Stats */}
         <motion.div
           variants={container}
           initial="hidden"
@@ -85,7 +87,7 @@ export default function TestimonialsSection() {
           viewport={{ once: true }}
           className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
         >
-          {stats.map((stat, index) => (
+          {stats.map((stat) => (
             <motion.div
               key={stat.label}
               variants={item}
@@ -102,7 +104,7 @@ export default function TestimonialsSection() {
           ))}
         </motion.div>
 
-        {/* Testimonials Grid */}
+        {/* Testimonials */}
         <motion.div
           variants={container}
           initial="hidden"
@@ -110,50 +112,46 @@ export default function TestimonialsSection() {
           viewport={{ once: true }}
           className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto"
         >
-          {testimonials.map((testimonial, index) => (
+          {testimonials.map((t) => (
             <motion.div
-              key={testimonial.id}
+              key={t.id}
               variants={item}
               className="bg-gray-900 rounded-2xl p-8 border border-gray-800 hover:border-gray-700 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5"
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <img
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full border border-gray-700"
-                  />
+                  <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full border border-gray-700" />
                   <div>
-                    <h3 className="font-semibold text-white">{testimonial.name}</h3>
-                    <p className="text-sm text-gray-400">{testimonial.role}</p>
+                    <h3 className="font-semibold text-white">{t.name}</h3>
+                    <p className="text-sm text-gray-400">{t.role}</p>
                   </div>
                 </div>
                 <Quote className="w-6 h-6 text-gray-600" />
               </div>
 
-              {/* Star Rating */}
+              {/* Stars */}
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
 
-              {/* Review Text */}
+              {/* Review */}
               <blockquote className="text-gray-300 text-lg leading-relaxed mb-6">
-                "{testimonial.review}"
+                "{t.review}"
               </blockquote>
 
-              {/* Stat Badge */}
+              {/* Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 text-green-400 rounded-full text-sm font-medium border border-green-500/20">
                 <TrendingUp className="w-4 h-4" />
-                {testimonial.stat}
+                {t.stat}
               </div>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Trust Badge */}
+        {/* Brand Trust Strip */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -164,17 +162,19 @@ export default function TestimonialsSection() {
           <p className="text-gray-500 text-sm uppercase tracking-wider font-semibold mb-6">
             TRUSTED BY INDUSTRY LEADERS
           </p>
+
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            {["Forbes", "TechCrunch", "Business Today", "Entrepreneur", "Inc Magazine"].map((company) => (
+            {["Forbes", "TechCrunch", "Business Today", "Entrepreneur", "Inc Magazine"].map((brand) => (
               <div
-                key={company}
+                key={brand}
                 className="text-gray-400 font-medium text-lg hover:text-gray-300 transition-colors cursor-pointer"
               >
-                {company}
+                {brand}
               </div>
             ))}
           </div>
         </motion.div>
+
       </div>
     </section>
   );
