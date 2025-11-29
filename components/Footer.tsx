@@ -78,11 +78,10 @@ const footerContent = {
     // Legal Links
     legalLinks: [
       "Privacy Policy",
-      "Terms & Conditions",
+      "TermsConditions",
       "Refund Policy",
       "Anti-Spam Policy",
       "Data Retention Policy",
-      "Affiliate Terms",
       "Responsible Messaging Policy"
     ],
     // Newsletter
