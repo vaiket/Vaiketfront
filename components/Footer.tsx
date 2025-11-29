@@ -50,7 +50,7 @@ const footerContent = {
       "Workflow Builder",
       "Template Library",
       "Analytics Dashboard",
-      "API & Integrations",
+      "API and Integrations",
       "Roadmap"
     ],
     // Resources Links
