@@ -1,200 +1,236 @@
-// components/FAQ.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion, AnimatePresence, easeInOut } from 'framer-motion';
-import { ChevronDown, MessageCircle, Rocket, Shield, CreditCard, Zap } from 'lucide-react';
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { Plus, Minus, Mail, Brain, Shield, CreditCard, Smartphone, Users, HelpCircle, MessageCircle } from "lucide-react";
 
-interface FAQItem {
-  id: string;
-  question: string;
-  answer: string;
-  category: string;
-  icon: any;
-  cta?: {
-    text: string;
-    link: string;
-    type: 'primary' | 'secondary';
-  };
-}
+export default function FAQSection() {
+  const [openIndex, setOpenIndex] = useState(null);
 
-const faqData: FAQItem[] = [
-  // (Your FAQ data unchanged - all content preserved)
-  // I did NOT modify business content.
-];
-
-const categoryIcons = {
-  'Getting Started': Rocket,
-  'Pricing & Billing': CreditCard,
-  'Security & Compliance': Shield,
-  'Business Growth': Zap
-};
-
-const FAQ = () => {
-  const [openItems, setOpenItems] = useState<Set<string>>(new Set(['1']));
-  const [activeCategory, setActiveCategory] = useState('All');
-
-  const toggleItem = (id: string) => {
-    setOpenItems((prev) => {
-      const updated = new Set(prev);
-      updated.has(id) ? updated.delete(id) : updated.add(id);
-      return updated;
-    });
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
 
-  const filteredFAQs =
-    activeCategory === 'All'
-      ? faqData
-      : faqData.filter((faq) => faq.category === activeCategory);
+  const faqs = [
+    {
+      question: "What is Vaiket Business Email?",
+      answer: "Vaiket Business Email is an AI-powered email platform that combines professional custom domain emails with automated AI customer support, lead capture, and sales automation.",
+      category: "Product",
+      icon: <Mail className="w-5 h-5 text-purple-400" />
+    },
+    {
+      question: "Do I need my own domain name?",
+      answer: "Yes, you'll need your own domain name (e.g., yourbusiness.com) to create professional email addresses. We help you set it up quickly if you don't have one.",
+      category: "Product",
+      icon: <Mail className="w-5 h-5 text-purple-400" />
+    },
+    {
+      question: "How does AI auto-reply work?",
+      answer: "Our V-AI analyzes incoming emails and provides instant, contextual responses 24/7. It learns from your business context and can handle common inquiries automatically.",
+      category: "Product",
+      icon: <Brain className="w-5 h-5 text-blue-400" />
+    },
+    {
+      question: "Can I migrate my existing emails?",
+      answer: "Absolutely! We provide seamless migration tools to transfer your existing emails, contacts, and folders from Gmail, Outlook, or any IMAP-supported service.",
+      category: "Product",
+      icon: <Mail className="w-5 h-5 text-purple-400" />
+    },
+    {
+      question: "Is my data secure?",
+      answer: "Yes, we use enterprise-grade encryption, secure IMAP/SMTP protocols, and comply with global data protection standards. Your data is protected 24/7.",
+      category: "Product",
+      icon: <Shield className="w-5 h-5 text-green-400" />
+    },
+    {
+      question: "Is there a free trial or refund guarantee?",
+      answer: "We offer a 14-day free trial with full features. If you're not satisfied, we provide a 30-day money-back guarantee on all annual plans.",
+      category: "Pricing",
+      icon: <CreditCard className="w-5 h-5 text-yellow-400" />
+    },
+    {
+      question: "Can I cancel my plan anytime?",
+      answer: "Yes, you can cancel or change your plan anytime. No long-term contracts or hidden fees. Cancel directly from your dashboard.",
+      category: "Pricing",
+      icon: <CreditCard className="w-5 h-5 text-yellow-400" />
+    },
+    {
+      question: "Does it work on mobile mail apps?",
+      answer: "Yes! Vaiket works seamlessly with all major mobile mail apps including Apple Mail, Gmail, Outlook, and any IMAP-supported email client.",
+      category: "Technical",
+      icon: <Smartphone className="w-5 h-5 text-cyan-400" />
+    },
+    {
+      question: "Can multiple teammates use the same inbox?",
+      answer: "Yes, you can add unlimited team members to shared inboxes with role-based permissions and collaborative features.",
+      category: "Technical",
+      icon: <Users className="w-5 h-5 text-pink-400" />
+    },
+    {
+      question: "What if AI replies incorrectly?",
+      answer: "You can review and edit AI responses before sending, or set up approval workflows. The AI learns from your corrections to improve over time.",
+      category: "Support",
+      icon: <HelpCircle className="w-5 h-5 text-orange-400" />
+    },
+    {
+      question: "Do you provide customer support?",
+      answer: "Yes, we offer 24/7 customer support via email, chat, and phone for all paid plans. Free trial users get email support with quick response times.",
+      category: "Support",
+      icon: <MessageCircle className="w-5 h-5 text-red-400" />
+    }
+  ];
 
-  const containerVariants = {
+  const container = {
     hidden: { opacity: 0 },
-    visible: {
+    show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-      },
-    },
+        staggerChildren: 0.1
+      }
+    }
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: easeInOut, // ✔ FIXED
-      },
-    },
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
   };
 
   return (
-    <section className="min-h-screen bg-black py-20 px-4 sm:px-6 lg:px-8" id="faq">
-      <div className="max-w-4xl mx-auto">
+    <section className="relative bg-black py-24 px-4 overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-0 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl" />
         
+        {/* Grid Pattern */}
+        <div 
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px',
+          }}
+        />
+      </div>
+
+      <div className="max-w-6xl mx-auto relative">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Get answers to common questions about Arte AI Business Automation
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Find answers related to Vaiket Business Emails, AI Support, and Billing.
           </p>
         </motion.div>
 
-        {/* Category Filter */}
+        {/* FAQ Grid */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-3 mb-12"
-        >
-          {['All', 'Getting Started', 'Pricing & Billing', 'Security & Compliance', 'Business Growth']
-            .map((category) => {
-              const IconComponent = categoryIcons[category as keyof typeof categoryIcons];
-              return (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    activeCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                  }`}
-                >
-                  {IconComponent && <IconComponent className="w-4 h-4" />}
-                  {category}
-                </button>
-              );
-            })}
-        </motion.div>
-
-        {/* FAQ List */}
-        <motion.div
-          variants={containerVariants}
+          variants={container}
           initial="hidden"
-          whileInView="visible"
-          className="space-y-4 mb-16"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
         >
-          <AnimatePresence>
-            {filteredFAQs.map((faq) => (
-              <motion.div
-                key={faq.id}
-                variants={itemVariants}
-                layout
-                className="bg-gray-900 rounded-lg border border-gray-800 hover:border-gray-700 transition-all duration-200"
+          {faqs.map((faq, index) => (
+            <motion.div
+              key={index}
+              variants={item}
+              className={`rounded-2xl border transition-all duration-300 ease-in-out backdrop-blur-xl
+                         ${openIndex === index 
+                           ? 'border-purple-500/50 bg-gradient-to-b from-[#13131A] to-[#0D0D12] shadow-lg shadow-purple-500/10' 
+                           : 'border-gray-800 bg-gradient-to-b from-[#13131A] to-[#0D0D12] hover:border-purple-500/30'}`}
+            >
+              <button
+                onClick={() => toggleFAQ(index)}
+                className="w-full flex items-center justify-between p-6 text-left"
               >
-                <button
-                  onClick={() => toggleItem(faq.id)}
-                  className="w-full px-6 py-6 text-left flex items-start justify-between gap-4"
-                >
-                  <div className="flex items-start gap-4 flex-1">
-                    <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center">
-                      <faq.icon className="w-4 h-4 text-blue-400" />
-                    </div>
-
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-white leading-relaxed">
-                        {faq.question}
-                      </h3>
-
-                      <AnimatePresence>
-                        {openItems.has(faq.id) && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="overflow-hidden pt-4"
-                          >
-                            <p className="text-gray-300 leading-relaxed">
-                              {faq.answer}
-                            </p>
-
-                            {faq.cta && (
-                              <div className="mt-4">
-                                <a
-                                  href={faq.cta.link}
-                                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                                    faq.cta.type === 'primary'
-                                      ? 'bg-blue-600 text-white hover:bg-blue-700'
-                                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                                  }`}
-                                >
-                                  {faq.cta.text}
-                                  {faq.cta.type === 'primary' && <Rocket className="w-4 h-4" />}
-                                  {faq.cta.type === 'secondary' && <MessageCircle className="w-4 h-4" />}
-                                </a>
-                              </div>
-                            )}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
+                <div className="flex items-start gap-4 flex-1">
+                  <div className="mt-1">
+                    {faq.icon}
                   </div>
-
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-medium text-gray-500 bg-gray-800 px-2 py-1 rounded-full">
+                        {faq.category}
+                      </span>
+                    </div>
+                    <h3 className="font-semibold text-white text-lg pr-8">
+                      {faq.question}
+                    </h3>
+                  </div>
+                </div>
+                
+                <div className="flex-shrink-0 ml-4">
                   <motion.div
-                    animate={{ rotate: openItems.has(faq.id) ? 180 : 0 }}
-                    transition={{ duration: 0.3, ease: easeInOut }} // ✔ FIXED
-                    className="flex-shrink-0"
+                    animate={{ rotate: openIndex === index ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="w-6 h-6 text-gray-400"
                   >
-                    <ChevronDown className="w-5 h-5 text-gray-400" />
+                    {openIndex === index ? (
+                      <Minus className="w-6 h-6" />
+                    ) : (
+                      <Plus className="w-6 h-6" />
+                    )}
                   </motion.div>
-                </button>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {openIndex === index && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-6">
+                      <div className="pl-9">
+                        <p className="text-gray-300 leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
         </motion.div>
 
+        {/* CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          viewport={{ once: true }}
+          className="text-center mt-16"
+        >
+          <div className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-gray-800 rounded-2xl p-8 backdrop-blur-xl">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Still have questions?
+            </h3>
+            <p className="text-gray-400 mb-6 max-w-md mx-auto">
+              Our support team is here to help you get the most out of Vaiket.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300">
+                Contact Support
+              </button>
+              <button className="px-6 py-3 border border-gray-700 text-gray-300 rounded-xl font-semibold hover:border-purple-500/50 hover:text-white transition-all duration-300">
+                Start Free Trial
+              </button>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
-};
-
-export default FAQ;
+}

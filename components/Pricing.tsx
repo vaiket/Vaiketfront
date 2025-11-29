@@ -11,8 +11,8 @@ const pricingPlans = [
     id: "starter",
     name: "Starter",
     badge: "Best for individuals",
-    monthlyPrice: 1,
-    yearlyPrice: 4990,
+    monthlyPrice: 999,
+    yearlyPrice: 11900,
     savePercent: "Save 20%",
     valueMetric: "Up to 10,000 emails / month",
     features: [
@@ -33,8 +33,8 @@ const pricingPlans = [
     name: "Growth",
     badge: "Most Popular ⭐⭐⭐⭐⭐",
     highlight: true,
-    monthlyPrice: 1,
-    yearlyPrice: 14990,
+    monthlyPrice: 1999,
+    yearlyPrice: 19055,
     savePercent: "Save 70%",
     valueMetric: "Up to 50,000 emails / month",
     features: [

@@ -37,3 +37,9 @@ body {
 .shadow-green-glow {
   box-shadow: 0 0 12px #00ff7b;
 }
+
+.sticky-left {
+  position: sticky;
+  top: 100px;
+  z-index: 20;
+}
