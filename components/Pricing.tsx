@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, easeInOut } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Check, Star, MessageCircle, Rocket, Zap, Users, Shield, Infinity, 
   Mail, Sparkles, Gift, Crown, TrendingUp, BadgeCheck, Globe, Lock, 
@@ -100,8 +100,8 @@ export default function Pricing() {
       scale: 1,
       transition: { 
         duration: 0.7, 
-        ease: [0.22, 1, 0.36, 1],
-        type: "spring",
+        ease: "easeOut" as const,
+        type: "spring" as const,
         stiffness: 100,
         damping: 15
       },
