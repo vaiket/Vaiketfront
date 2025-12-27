@@ -4,11 +4,11 @@ import { supabaseAdmin } from "@/src/lib/supabaseClient";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, phone, amount, plan } = await req.json();
+    const { name, email, phone, amount } = await req.json();
 
-    if (!name || !email || !phone || !amount || !plan) {
+    if (!name || !email || !phone) {
       return NextResponse.json(
-        { error: true, message: "Missing fields" },
+        { error: true, message: "Missing customer details" },
         { status: 400 }
       );
     }
@@ -20,26 +20,28 @@ export async function POST(req: NextRequest) {
     const furl = process.env.PAYU_FAILURE_URL!;
 
     const txnid = "TXN" + Date.now();
-    const productinfo = plan;
+    const productInfo = "Demo Product";
 
-    // Generate hash
-    const hashString = `${key}|${txnid}|${amount}|${productinfo}|${name}|${email}|||||||||||${salt}`;
-    const hash = crypto
-      .createHash("sha512")
-      .update(hashString)
-      .digest("hex");
+    const hashString = `${key}|${txnid}|${amount}|${productInfo}|${name}|${email}|||||||||||${salt}`;
+    const hash = crypto.createHash("sha512").update(hashString).digest("hex");
 
-    // Save initial payment
-    await supabaseAdmin.from("payments").insert({
+    // Insert to Supabase
+    const { error: dbError } = await supabaseAdmin.from("payments").insert({
+      txnid,
       name,
       email,
       phone,
-      plan,
       amount,
-      payment_type: "PAYU",
-      payment_status: "PENDING",
-      txnid,
+      status: "PENDING",
     });
+
+    if (dbError) {
+      console.error("Supabase error:", dbError);
+      return NextResponse.json(
+        { error: true, message: "Database insertion failed" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       actionUrl: gateway,
@@ -47,19 +49,19 @@ export async function POST(req: NextRequest) {
         key,
         txnid,
         amount,
-        productinfo,
         firstname: name,
         email,
         phone,
+        productinfo: productInfo,
         surl,
         furl,
         hash,
       },
     });
   } catch (err) {
-    console.error("PayU API Error:", err);
+    console.error("Payment API Error:", err);
     return NextResponse.json(
-      { error: true, message: "Payment init failed" },
+      { error: true, message: "Server crashed" },
       { status: 500 }
     );
   }
