@@ -1,31 +1,31 @@
-import type { Metadata } from "next"
-import Script from "next/script"
-import { Geist, Geist_Mono } from "next/font/google"
-import "./globals.css"
+import type { Metadata } from "next";
+import Script from "next/script";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
 
-// ✅ CORRECT imports (Header is DEFAULT export now)
-import Header from "@/components/ui/header-3"
-import Footer from "@/components/Footer"
+// ✅ Correct imports (as per your project)
+import Header from "@/components/ui/header-3";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-})
+});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-})
+});
 
 export const metadata: Metadata = {
   title: "Vaiket – AI Chat & Mail Automation",
   description: "Automate communication & grow sales with AI.",
-}
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -67,14 +67,12 @@ export default function RootLayout({
         {/* 🔹 Header */}
         <Header />
 
-        {/* 🔹 Main content */}
-        <main className="flex-1">
-          {children}
-        </main>
+        {/* 🔹 Main Content */}
+        <main className="flex-1">{children}</main>
 
         {/* 🔹 Footer */}
         <Footer />
       </body>
     </html>
-  )
+  );
 }
