@@ -96,11 +96,7 @@ export default function RootLayout({
           }}
         />
 
-        {/* 🔹 Elfsight Platform */}
-        <Script
-          src="https://elfsightcdn.com/platform.js"
-          strategy="afterInteractive"
-        />
+      
       </head>
 
       <body
@@ -130,11 +126,7 @@ export default function RootLayout({
           />
         </noscript>
 
-        {/* 🔹 Elfsight WhatsApp Widget */}
-        <div
-          className="elfsight-app-f7a55a9a-d9bd-481f-abe3-aa895b5bb19a"
-          data-elfsight-app-lazy
-        />
+      
 
         {/* 🔹 Footer */}
         <Footer />
