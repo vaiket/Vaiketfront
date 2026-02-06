@@ -9,16 +9,20 @@ import Footer from "@/components/Footer";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Vaiket – AI Chat & Mail Automation",
   description: "Automate communication & grow sales with AI.",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -27,9 +31,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-          <head>
-              {/* 🔹 Google Tag Manager */}
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* 🔹 Google Tag Manager */}
         <Script
           id="gtm-script"
           strategy="afterInteractive"
@@ -43,7 +47,8 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Facebook Pixel */}
+
+        {/* 🔹 Facebook Pixel */}
         <Script
           id="facebook-pixel"
           strategy="afterInteractive"
@@ -73,26 +78,25 @@ export default function RootLayout({
           }}
         />
 
-        {/* Google Analytics GA4 */}
-        {/* Google Analytics GA4 */}
-  <Script
-    src="https://www.googletagmanager.com/gtag/js?id=G-YPKY9BHQMS"
-    strategy="afterInteractive"
-  />
-  <Script
-    id="ga4"
-    strategy="afterInteractive"
-    dangerouslySetInnerHTML={{
-      __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-YPKY9BHQMS');
-      `,
-    }}
+        {/* 🔹 Google Analytics GA4 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-YPKY9BHQMS"
+          strategy="afterInteractive"
         />
-        
-         {/* Elfsight Platform Script */}
+        <Script
+          id="ga4"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-YPKY9BHQMS');
+            `,
+          }}
+        />
+
+        {/* 🔹 Elfsight Platform */}
         <Script
           src="https://elfsightcdn.com/platform.js"
           strategy="afterInteractive"
@@ -102,16 +106,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col bg-black text-white`}
       >
+        {/* 🔹 Header */}
         <Header />
 
-        <main className="flex-1"></main>
-{/* Noupe Chatbot */}
+        {/* ✅ MAIN CONTENT (Mobile-safe) */}
+        <main className="flex-1 w-full overflow-x-hidden">
+          {children}
+        </main>
+
+        {/* 🔹 Noupe Chatbot */}
         <Script
           src="https://www.noupe.com/embed/019c305dccd17b379bf1a2354da849cd4a7f.js"
           strategy="afterInteractive"
-              />
-              
-              {/* 🔹 GTM (noscript) */}
+        />
+
+        {/* 🔹 GTM (noscript) */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5H4CKVX3"
@@ -120,18 +129,15 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        
-         {children}
 
-        {/* Elfsight WhatsApp Chat Widget */}
+        {/* 🔹 Elfsight WhatsApp Widget */}
         <div
           className="elfsight-app-f7a55a9a-d9bd-481f-abe3-aa895b5bb19a"
           data-elfsight-app-lazy
         />
-        
-        <Footer />
 
-        
+        {/* 🔹 Footer */}
+        <Footer />
       </body>
     </html>
   );

@@ -65,6 +65,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col bg-black text-white`}
       >
+
+        {/* 🔹 GTM (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-5H4CKVX3"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        
+         {children}
         {/* 🔹 Header */}
         <Header />
 
