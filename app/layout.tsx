@@ -104,7 +104,7 @@ export default function RootLayout({
       >
         <Header />
 
-        <main className="flex-1">{children}</main>
+        <main className="flex-1"></main>
 {/* Noupe Chatbot */}
         <Script
           src="https://www.noupe.com/embed/019c305dccd17b379bf1a2354da849cd4a7f.js"

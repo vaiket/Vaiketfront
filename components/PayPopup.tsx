@@ -32,7 +32,6 @@ export default function PayPopup({
   });
   const [showModal, setShowModal] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const firstInputRef = useRef<HTMLInputElement>(null);
 
   // Handle modal open/close with animation
   useEffect(() => {
@@ -40,13 +39,6 @@ export default function PayPopup({
       // Show modal after a tiny delay to trigger animation
       setTimeout(() => setShowModal(true), 10);
       document.body.style.overflow = 'hidden';
-      
-      // Focus on first input when modal opens
-      setTimeout(() => {
-        if (firstInputRef.current) {
-          firstInputRef.current.focus();
-        }
-      }, 300);
     } else {
       setShowModal(false);
       document.body.style.overflow = 'unset';
@@ -137,21 +129,18 @@ export default function PayPopup({
 
   return (
     <>
-      {/* Blurred Background Overlay - 25% blur */}
-      <div className={`fixed inset-0 bg-black/30 backdrop-blur-md z-50 p-4 font-sans flex items-center justify-center transition-all duration-300 ${
-        showModal ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      }`}>
+      {/* 100% Transparent Background Overlay */}
+      <div className={`fixed inset-0 bg-transparent z-50 p-4 font-sans flex items-center justify-center transition-opacity duration-300 ${showModal ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div
           ref={modalRef}
           className={`
             bg-white w-full max-w-md rounded-xl shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto
             transform transition-all duration-260 ease-custom
             ${showModal ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-98'}
-            relative z-50
           `}
         >
           {/* Header */}
-          <div className="px-6 pt-6 pb-4 sticky top-0 bg-white border-b border-gray-100 z-10">
+          <div className="px-6 pt-6 pb-4 sticky top-0 bg-white border-b border-gray-100">
             <div className="flex justify-between items-start mb-2">
               <div>
                 <h1 className="text-2xl font-bold text-[#1a237e]">Payment Details</h1>
@@ -160,7 +149,6 @@ export default function PayPopup({
               <button
                 onClick={onClose}
                 className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-full transition-colors"
-                aria-label="Close payment modal"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -181,7 +169,7 @@ export default function PayPopup({
                   type="text"
                   disabled
                   value={`₹ ${amount.toFixed(2)}`}
-                  className="w-full p-4 pl-12 rounded-lg border border-blue-200 bg-blue-50 text-gray-900 font-medium text-lg cursor-not-allowed"
+                  className="w-full p-4 pl-12 rounded-lg border border-blue-200 bg-blue-50 text-gray-900 font-medium text-lg"
                 />
               </div>
             </div>
@@ -191,13 +179,12 @@ export default function PayPopup({
               <label className="block text-sm font-medium text-gray-700">Email</label>
               <div className="relative">
                 <input
-                  ref={firstInputRef}
                   type="email"
                   placeholder="you@example.com"
                   value={form.email}
                   onChange={(e) => setForm({...form, email: e.target.value})}
                   onBlur={() => handleBlur('email')}
-                  className={`w-full p-4 rounded-lg border ${touched.email && !form.email.includes('@') ? 'border-red-500' : 'border-gray-300'} bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100`}
+                  className={`w-full p-4 rounded-lg border ${touched.email && !form.email.includes('@') ? 'border-red-500' : 'border-gray-300'} bg-white focus:outline-none focus:border-blue-500`}
                 />
                 {touched.email && !form.email.includes('@') && (
                   <AlertCircle className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-red-500" />
@@ -223,7 +210,7 @@ export default function PayPopup({
                   value={form.phone}
                   onChange={(e) => setForm({...form, phone: e.target.value.replace(/\D/g, '')})}
                   onBlur={() => handleBlur('phone')}
-                  className={`w-full p-4 rounded-lg border ${touched.phone && form.phone.length < 10 ? 'border-red-500' : 'border-gray-300'} bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100`}
+                  className={`w-full p-4 rounded-lg border ${touched.phone && form.phone.length < 10 ? 'border-red-500' : 'border-gray-300'} bg-white focus:outline-none focus:border-blue-500`}
                   maxLength={10}
                 />
                 {touched.phone && form.phone.length < 10 && (
@@ -250,7 +237,7 @@ export default function PayPopup({
                   value={form.name}
                   onChange={(e) => setForm({...form, name: e.target.value})}
                   onBlur={() => handleBlur('name')}
-                  className={`w-full p-4 rounded-lg border ${touched.name && form.name.length < 3 ? 'border-red-500' : 'border-gray-300'} bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100`}
+                  className={`w-full p-4 rounded-lg border ${touched.name && form.name.length < 3 ? 'border-red-500' : 'border-gray-300'} bg-white focus:outline-none focus:border-blue-500`}
                 />
                 {touched.name && form.name.length < 3 && (
                   <AlertCircle className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-red-500" />
@@ -273,7 +260,6 @@ export default function PayPopup({
                   src="https://cdn.razorpay.com/static/assets/pay_methods_branding.png" 
                   alt="Accepted Payment Methods: UPI, VISA, RuPay, Mastercard"
                   className="h-8 w-auto mx-auto object-contain" // 35% smaller (was h-12)
-                  loading="lazy"
                 />
               </div>
             </div>
@@ -285,7 +271,7 @@ export default function PayPopup({
                 disabled={!isValid || loading}
                 className={`w-full py-4 rounded-lg font-medium text-white transition-all duration-200 flex items-center justify-center gap-3 ${
                   isValid && !loading
-                    ? "bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-blue-500/25 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50"
+                    ? "bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-blue-500/25"
                     : "bg-blue-300 cursor-not-allowed"
                 }`}
               >
