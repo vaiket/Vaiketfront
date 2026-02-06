@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/api/payu/pay/route.ts1", "components/Header.tsx", "components/Pricing.tsx" , "components/Pricing.tsx", "components/Features.tsx2" ],
+, "app/api/payu/pay/route.ts1", "components/Header.tsx", "components/Pricing.tsx" , "components/Pricing.tsx", "components/Features.tsx2", "components/PayPopubp.tsx" ],
   "exclude": ["node_modules"]
 }

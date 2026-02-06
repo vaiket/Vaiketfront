@@ -357,9 +357,15 @@ export default function HeroSection_04() {
       <div className="pt-4 pb-10 sm:pt-6 sm:pb-12 text-center">
         <div className="relative max-w-2xl mx-auto">
           <h1 className="text-3xl sm:text-5xl md:text-6xl text-white font-bold tracking-tight">
-            Build Your Online Presence. Automate. Grow Faster.
+            Stop Juggling Tools.
+Start Running a Business.
+
           </h1>
-          <p className="mt-6 text-lg text-white">Turn visitors into customers with websites, marketing, and AI automation — all in one place..</p>
+          <p className="mt-6 text-lg text-white">Vaiket brings your website, marketing, leads, and automation
+into one unified system — so you can run and grow your business.
+
+
+</p>
           <AnimatedGroup
             variants={{
               container: {
@@ -379,7 +385,9 @@ export default function HeroSection_04() {
                 asChild
                 size="lg"
                 className="rounded-xl px-5 text-base">
-                <span className="text-nowrap">Get Started</span>
+                <a
+                  href="/register"
+               className="text-nowrap">Get Started</a>
               </Button>
             </div>
             <div
@@ -389,7 +397,9 @@ export default function HeroSection_04() {
                 asChild
                 size="lg"
                 className="rounded-xl px-5 text-base bg-white text-black hover:bg-black hover:text-white">
-                <span className="text-nowrap">Talk to an Expert</span>
+                <a
+                href="wa.me/+917004614077"
+                  className="text-nowrap">Talk to an Expert</a>
               </Button>
             </div>
           </AnimatedGroup>

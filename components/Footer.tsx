@@ -304,21 +304,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Floating WhatsApp Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <a
-          href="https://wa.me/+917004614077"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all hover:scale-105"
-          aria-label="Chat on WhatsApp"
-        >
-          <div className="flex flex-col items-center">
-            <MessageSquare className="w-5 h-5" />
-            <span className="text-[10px] mt-0.5 font-medium">Chat</span>
-          </div>
-        </a>
-      </div>
+
     </footer>
   );
 };

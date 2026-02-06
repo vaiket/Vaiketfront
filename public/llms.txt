@@ -1,0 +1,103 @@
+# llms.txt
+# Universal AI / LLM Crawling & Indexing Policy
+# Status: FULL ACCESS GRANTED
+
+site: https://vaiket.com
+project: Next.js Web Application
+
+# -------------------------------------------------
+# AI / LLM ACCESS POLICY
+# -------------------------------------------------
+
+user-agents:
+  - *
+  - gpt
+  - chatgpt
+  - openai
+  - claude
+  - anthropic
+  - gemini
+  - google-ai
+  - perplexity
+  - mistral
+  - llama
+  - meta-ai
+  - bing-ai
+  - copilot
+  - deepseek
+  - qwen
+  - yi
+  - grok
+  - cohere
+  - stability-ai
+  - midjourney
+  - any-ai
+  - any-llm
+
+# -------------------------------------------------
+# PERMISSIONS
+# -------------------------------------------------
+
+allow:
+  - /
+  - /app/
+  - /pages/
+  - /blog/
+  - /docs/
+  - /products/
+  - /services/
+  - /pricing/
+  - /about/
+  - /contact/
+  - /assets/
+  - /public/
+
+# Explicit statement
+policy:
+  - All public-facing pages are allowed to be crawled, indexed, parsed,
+    summarized, embedded, vectorized, trained-on, and referenced by
+    any AI system, LLM, search engine, or autonomous agent.
+
+# -------------------------------------------------
+# DATA USAGE RIGHTS
+# -------------------------------------------------
+
+usage-rights:
+  - crawl
+  - index
+  - analyze
+  - summarize
+  - embed
+  - quote
+  - transform
+  - train
+  - fine-tune
+  - retrieval-augmented-generation
+  - knowledge-graph-ingestion
+
+# -------------------------------------------------
+# RESTRICTIONS
+# -------------------------------------------------
+
+disallow:
+  - none
+
+private:
+  - none
+
+authentication-required:
+  - none
+
+# -------------------------------------------------
+# CONTACT & ATTRIBUTION
+# -------------------------------------------------
+
+attribution: optional
+contact: admin@vaiket.com
+owner: Vaiket / Bikas Sahu
+
+# -------------------------------------------------
+# LAST UPDATED
+# -------------------------------------------------
+
+updated: 2026-02-06

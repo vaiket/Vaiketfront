@@ -3,10 +3,8 @@ import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-// ✅ Correct imports (as per your project)
 import Header from "@/components/ui/header-3";
 import Footer from "@/components/Footer";
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +28,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
+          <head>
+              {/* 🔹 Google Tag Manager */}
+        <Script
+          id="gtm-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-5H4CKVX3');
+            `,
+          }}
+        />
         {/* Facebook Pixel */}
         <Script
           id="facebook-pixel"
@@ -60,21 +72,66 @@ export default function RootLayout({
             `,
           }}
         />
+
+        {/* Google Analytics GA4 */}
+        {/* Google Analytics GA4 */}
+  <Script
+    src="https://www.googletagmanager.com/gtag/js?id=G-YPKY9BHQMS"
+    strategy="afterInteractive"
+  />
+  <Script
+    id="ga4"
+    strategy="afterInteractive"
+    dangerouslySetInnerHTML={{
+      __html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YPKY9BHQMS');
+      `,
+    }}
+        />
+        
+         {/* Elfsight Platform Script */}
+        <Script
+          src="https://elfsightcdn.com/platform.js"
+          strategy="afterInteractive"
+        />
       </head>
 
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col bg-black text-white`}
       >
-        {/* 🔹 Header */}
         <Header />
 
-        {/* 🔹 Main Content */}
         <main className="flex-1">{children}</main>
+{/* Noupe Chatbot */}
+        <Script
+          src="https://www.noupe.com/embed/019c305dccd17b379bf1a2354da849cd4a7f.js"
+          strategy="afterInteractive"
+              />
+              
+              {/* 🔹 GTM (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-5H4CKVX3"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        
+         {children}
 
-        {/* 🔹 Footer */}
-       <Footer />
+        {/* Elfsight WhatsApp Chat Widget */}
+        <div
+          className="elfsight-app-f7a55a9a-d9bd-481f-abe3-aa895b5bb19a"
+          data-elfsight-app-lazy
+        />
+        
+        <Footer />
 
-
+        
       </body>
     </html>
   );

@@ -68,12 +68,12 @@ export default function Header() {
   className="flex items-center rounded-md p-2 hover:bg-accent transition"
 >
   <Image
-    src="/logo/vaiket.svg"
+    src="/logo/vai.svg"
     alt="Vaiket"
     width={110}
     height={24}
     priority
-    className="h-6 w-auto"
+    className="h-8 w-auto"
   />
 </Link>
 
