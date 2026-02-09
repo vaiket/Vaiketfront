@@ -386,7 +386,7 @@ into one unified system — so you can run and grow your business.
                 size="lg"
                 className="rounded-xl px-5 text-base">
                 <a
-                  href="/register"
+                  href="/get-started"
                className="text-nowrap">Get Started</a>
               </Button>
             </div>
@@ -398,7 +398,7 @@ into one unified system — so you can run and grow your business.
                 size="lg"
                 className="rounded-xl px-5 text-base bg-white text-black hover:bg-black hover:text-white">
                 <a
-                href="wa.me/+917004614077"
+                href="https://wa.me/+917004614077"
                   className="text-nowrap">Talk to an Expert</a>
               </Button>
             </div>
@@ -433,7 +433,7 @@ into one unified system — so you can run and grow your business.
             />
             <Image
               className="z-2 border-border/25 aspect-15/8 relative rounded-2xl border dark:hidden"
-              src="https://tailark.com/_next/image?url=%2Fmail2-light.png&w=3840&q=75"
+              src="https://wabridge.com/_next/static/media/grow.4788fe5c.svg"
               alt="app screen"
               width={2700}
               height={1440}

@@ -1,0 +1,135 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Script from "next/script";
+
+type Order = {
+  id: string;
+  services: string[];
+  subtotal: number;
+  gst: number;
+  total: number;
+};
+
+export default function CheckoutPage() {
+  const params = useSearchParams();
+  const orderId = params.get("order_id");
+
+  const [order, setOrder] = useState<Order | null>(null);
+
+  useEffect(() => {
+    if (!orderId) return;
+
+    fetch("/api/orders/get", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ order_id: orderId }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setOrder(data.order);
+      });
+  }, [orderId]);
+
+  const payNow = async () => {
+    if (!order) return;
+
+    const res = await fetch(
+      "/api/checkout/create-order",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: order.total,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: data.order.amount,
+      currency: "INR",
+      name: "Vaiket",
+      description: "Order Payment",
+      order_id: data.order.id,
+      handler: async function (response: any) {
+        await fetch(
+          "/api/checkout/payment-success",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              order_id: orderId,
+              razorpay_order_id:
+                response.razorpay_order_id,
+              razorpay_payment_id:
+                response.razorpay_payment_id,
+            }),
+          }
+        );
+
+        alert("✅ Payment successful!");
+      },
+      theme: { color: "#000000" },
+    };
+
+    // @ts-ignore
+    new window.Razorpay(options).open();
+  };
+
+  if (!order) {
+    return (
+      <div className="p-20 text-center">
+        Loading checkout…
+      </div>
+    );
+  }
+
+  return (
+    <main className="max-w-xl mx-auto py-20 px-6">
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+
+      <h1 className="text-3xl font-bold mb-6">
+        Complete Your Payment
+      </h1>
+
+      <div className="border rounded-xl p-6 mb-6">
+        {order.services.map((s) => (
+          <div
+            key={s}
+            className="flex justify-between text-sm mb-2"
+          >
+            <span>{s}</span>
+          </div>
+        ))}
+
+        <hr className="my-3" />
+
+        <div className="flex justify-between">
+          <span>Subtotal</span>
+          <span>₹{order.subtotal}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>GST</span>
+          <span>₹{order.gst}</span>
+        </div>
+        <div className="flex justify-between font-bold text-lg mt-2">
+          <span>Total</span>
+          <span>₹{order.total}</span>
+        </div>
+      </div>
+
+      <button
+        onClick={payNow}
+        className="w-full bg-black text-white py-3 rounded"
+      >
+        Pay ₹{order.total} →
+      </button>
+    </main>
+  );
+}

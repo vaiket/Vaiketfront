@@ -28,7 +28,14 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "app/api/payu/pay/route.ts1", "components/Header.tsx", "components/PricingSection.tsx" , "components/PricingSection.tsx", "components/Features.tsx2", "components/PayPopup.tsx" ],
+    "**/*.mts",
+    "app/api/payu/pay/route.ts1",
+    "components/Header.tsx",
+    "components/PricingSection.tsx",
+    "components/PricingSection.tsx",
+    "components/Features.tsx2",
+    "components/PayPopup.tsx",
+    "app/checkout/page.tsx.backup"
+  ],
   "exclude": ["node_modules"]
 }

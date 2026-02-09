@@ -136,13 +136,13 @@ export default function Header() {
 				</div>
 				<div className="hidden items-center gap-2 md:flex">
   <Button variant="outline" asChild>
-    <Link href="https://ai.vaiket.com/login">
+    <Link href="/get-started">
       Sign In
     </Link>
   </Button>
 
   <Button variant="black" asChild>
-    <Link href="https://ai.vaiket.com/register">
+    <Link href="/get-started">
       Get Started
     </Link>
   </Button>
@@ -179,13 +179,13 @@ export default function Header() {
 				</NavigationMenu>
 				<div className="flex flex-col gap-2 md:hidden">
   <Button variant="outline" asChild className="w-full">
-    <Link href="https://ai.vaiket.com/login">
+    <Link href="https://vaiket.com/get-started">
       Sign In
     </Link>
   </Button>
 
   <Button variant="black" asChild className="w-full">
-    <Link href="https://ai.vaiket.com/register">
+    <Link href="/get-started">
       Get Started
     </Link>
   </Button>
@@ -253,37 +253,37 @@ function ListItem({
 const productLinks: LinkItem[] = [
 	{
 		title: 'AI Email Automation',
-		href: 'https://www.vaiket.com/product/ai-email-automation',
+		href: '/product/ai-email-automation',
 		description: 'Create responsive websites with ease',
 		icon: GlobeIcon,
 	},
 	{
-		title: 'MAIL-BOX',
-		href: 'https://vaiket.com/mail-box',
+		title: 'Whatsapp Automation',
+		href: '/product/whatsapp',
 		description: 'Deploy and scale apps in the cloud',
 		icon: LayersIcon,
 	},
 	{
-		title: 'Team Collaboration',
-		href: 'Documentation',
+		title: 'Website Development',
+		href: '/product/website',
 		description: 'Tools to help your teams work better together',
 		icon: UserPlusIcon,
 	},
 	{
-		title: 'Analytics',
-		href: 'https://www.vaiket.com/product/analytics-dashboard',
+		title: 'Digital Marketing',
+		href: '/product/digital-marketing',
 		description: 'Track and analyze your website traffic',
 		icon: BarChart,
 	},
 	{
-		title: 'Integrations',
-		href: 'https://www.vaiket.com/product/api-and-integrations',
+		title: 'SMS & RCS',
+		href: '/product/sms-and-rcs',
 		description: 'Connect your apps and services',
 		icon: PlugIcon,
 	},
 	{
-		title: 'API',
-		href: 'https://www.vaiket.com/product/api-and-integrations',
+		title: 'CRM & Leads',
+		href: '/product/crm-and-leads',
 		description: 'Build custom integrations with our API',
 		icon: CodeIcon,
 	},
