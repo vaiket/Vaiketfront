@@ -15,8 +15,8 @@ declare global {
 const GST_RATE = 0.18;
 
 const SERVICES = [
-  { id: "email", title: "AI Email Automation", price: 4, icon: "✉️" },
-  { id: "whatsapp", title: "WhatsApp Automation", price: 1499, icon: "💬" },
+  { id: "email", title: "AI Email Automation", price: 499, icon: "📧" },
+  { id: "whatsapp", title: "WhatsApp Automation", price: 2999, icon: "💬" },
   { id: "website", title: "Website Development", price: 4999, icon: "🌐" },
   { id: "sms", title: "SMS & RCS", price: 999, icon: "📱" },
   { id: "marketing", title: "Digital Marketing", price: 2999, icon: "📈" },
