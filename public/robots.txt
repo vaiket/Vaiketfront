@@ -72,7 +72,7 @@ Sitemap: https://vaiket.com/sitemap-index.xml
 # CRAWL OPTIMIZATION (OPTIONAL – SAFE)
 # -------------------------------------------------
 
-Crawl-delay: 1
+
 
 # -------------------------------------------------
 # NOTES
