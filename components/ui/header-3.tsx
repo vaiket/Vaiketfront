@@ -68,12 +68,12 @@ export default function Header() {
   className="flex items-center rounded-md p-2 hover:bg-accent transition"
 >
   <Image
-    src="/logo/hg.png"
+    src="/logo/zds.png"
     alt="Vaiket"
     width={220}
     height={48}
     priority
-    className="h-8 w-auto"
+    className="h-50 w-auto"
   />
 </Link>
 
