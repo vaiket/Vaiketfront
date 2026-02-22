@@ -70,8 +70,8 @@ export default function Header() {
   <Image
     src="/logo/hg.png"
     alt="Vaiket"
-    width={110}
-    height={24}
+    width={220}
+    height={48}
     priority
     className="h-8 w-auto"
   />
