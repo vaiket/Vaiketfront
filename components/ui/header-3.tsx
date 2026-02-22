@@ -70,10 +70,10 @@ export default function Header() {
   <Image
     src="/logo/zds.png"
     alt="Vaiket"
-    width={220}
-    height={48}
+    width={110}
+    height={24}
     priority
-    className="h-50 w-auto"
+    className="h-8 w-auto"
   />
 </Link>
 
