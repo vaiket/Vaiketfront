@@ -72,10 +72,10 @@ export default function Hero() {
             <div className="relative overflow-hidden rounded-[2rem] border border-cyan-100/80 bg-white/85 p-3 shadow-[0_36px_70px_-35px_rgba(14,116,144,0.45)] backdrop-blur">
               <div className="relative overflow-hidden rounded-[1.55rem] border border-slate-100 bg-gradient-to-br from-[#f6fcff] via-[#eef8ff] to-[#f5fffb]">
                 <Image
-                  src="/hero/list-your-business-proof-v3.png"
+                  src="/hero/list-your-business-proof-v4.png"
                   alt="Vaiket business listing onboarding and directory proof visual"
-                  width={1024}
-                  height={1024}
+                  width={1152}
+                  height={928}
                   priority
                   className="h-auto w-full"
                 />
