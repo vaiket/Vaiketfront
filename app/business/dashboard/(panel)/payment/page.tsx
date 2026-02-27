@@ -20,7 +20,7 @@ export default async function BusinessDashboardPaymentPage() {
     <div>
       <h1 className="text-2xl font-extrabold text-slate-900">Verification Payment</h1>
       <p className="mt-1 text-sm text-slate-600">
-        Pay Rs. 1 + GST to submit your listing for approval.
+        Pay Rs. 99 + GST to submit your listing for approval.
       </p>
 
       {!listing ? (

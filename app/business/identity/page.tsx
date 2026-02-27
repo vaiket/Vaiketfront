@@ -37,7 +37,7 @@ const valuePillars = [
 const processSteps = [
   "Create business owner account",
   "Submit profile details and contact channels",
-  "Pay verification fee (Rs. 1 + GST in current mode)",
+  "Pay verification fee (Rs. 99 + GST)",
   "Vaiket team reviews listing quality and authenticity",
   "On approval, your profile goes live with URL, QR, and certificate",
 ];
