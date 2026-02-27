@@ -3,7 +3,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
-import ThemeModeSwitch from '@/components/ThemeModeSwitch';
 import { createPortal } from 'react-dom';
 import Link from "next/link"
 import {
@@ -162,19 +161,10 @@ export default function Header() {
 									</div>
 								</NavigationMenuContent>
 							</NavigationMenuItem>
-							<NavigationMenuLink className="px-2" asChild>
-								<a
-									href="https://www.vaiket.com/#pricing"
-									className="rounded-md px-2 py-1.5 text-[15px] font-medium text-slate-800 transition hover:bg-transparent hover:text-cyan-600 dark:text-slate-200 dark:hover:text-cyan-400"
-								>
-									Pricing
-								</a>
-							</NavigationMenuLink>
 						</NavigationMenuList>
 					</NavigationMenu>
 				</div>
 				<div className="hidden items-center gap-2 md:flex">
-					<ThemeModeSwitch />
 					<Button variant="outline" asChild>
 						<Link href="/get-started">
 							Sign In
@@ -229,10 +219,6 @@ export default function Header() {
 						</div>
 					</NavigationMenu>
 				<div className="flex flex-col gap-2 md:hidden">
-					<div className="mb-1 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900/70">
-						<span className="text-sm font-medium">Theme</span>
-						<ThemeModeSwitch />
-					</div>
 					<Button variant="outline" asChild className="w-full">
 						<Link href="/get-started">
 							Sign In
