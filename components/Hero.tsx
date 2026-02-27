@@ -30,7 +30,7 @@ export default function Hero() {
         <div className="grid min-h-[76vh] items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
           <div>
             <p className="inline-flex items-center rounded-full border border-cyan-200/85 bg-white/85 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-cyan-800 shadow-sm backdrop-blur">
-              LIMITED BUSINESSES ARE BEING VERIFIED ON VAIKET
+              Early businesses are already getting enquiries on Vaiket
             </p>
 
             <h1
@@ -41,10 +41,7 @@ export default function Hero() {
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
-              Early businesses on Vaiket are already getting visibility, a
-              verified business certificate, and enquiries from customers
-              searching for their services. Secure your spot before your
-              competitors join.
+              List your business in minutes, get verified, earn trust with a recognition certificate, and start receiving real customer enquiries from your area.
             </p>
 
             <div className="mt-10">
@@ -53,7 +50,7 @@ export default function Hero() {
                 className="group relative inline-flex h-16 min-w-[320px] items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-r from-cyan-600 via-teal-500 to-cyan-700 px-7 shadow-[0_10px_24px_-16px_rgba(6,182,212,0.58)] transition-transform duration-200 hover:-translate-y-0.5"
               >
                 <span className="inline-flex items-center gap-2 text-base font-extrabold text-white">
-                  Get Listed Now - Rs. 99 + GST
+                  List My Business for ₹99
                   <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
               </Link>
