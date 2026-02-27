@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   const { lead_id } = await req.json();
 
   const { data, error } = await supabase
-    .from("lead")
+    .from("leads")
     .select("name, email, phone")
     .eq("id", lead_id)
     .single();

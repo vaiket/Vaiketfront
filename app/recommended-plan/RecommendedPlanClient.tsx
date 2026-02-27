@@ -1,27 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Check, Shield, CreditCard, Zap, Building2 } from "lucide-react";
+import { Manrope, Sora } from "next/font/google";
+import {
+  ArrowRight,
+  Check,
+  ChevronLeft,
+  CreditCard,
+  Globe,
+  Loader2,
+  Lock,
+  Mail,
+  MessageSquare,
+  RadioTower,
+  ShieldCheck,
+  Sparkles,
+  Users,
+} from "lucide-react";
 
-/* ================= GLOBAL ================= */
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
+const headingFont = Sora({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+});
 
-/* ================= CONFIG ================= */
-const GST_RATE = 0.18;
-
-const SERVICES = [
-  { id: "email", title: "AI Email Automation", price: 499, icon: "📧" },
-  { id: "whatsapp", title: "WhatsApp Automation", price: 2999, icon: "💬" },
-  { id: "website", title: "Website Development", price: 4999, icon: "🌐" },
-  { id: "sms", title: "SMS & RCS", price: 999, icon: "📱" },
-  { id: "marketing", title: "Digital Marketing", price: 2999, icon: "📈" },
-  { id: "crm", title: "CRM & Lead Management", price: 1999, icon: "👥" },
-];
+const bodyFont = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 type Lead = {
   id: string;
@@ -30,87 +38,210 @@ type Lead = {
   phone: string;
 };
 
-/* ================= RAZORPAY LOADER (IMPORTANT) ================= */
-const loadRazorpay = (): Promise<boolean> => {
-  return new Promise((resolve) => {
-    if (window.Razorpay) {
+type ServiceId =
+  | "email"
+  | "whatsapp"
+  | "website"
+  | "sms"
+  | "marketing"
+  | "crm";
+
+type Service = {
+  id: ServiceId;
+  title: string;
+  description: string;
+  price: number;
+  icon: React.ComponentType<{ className?: string }>;
+};
+
+type RazorpayResponse = {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+};
+
+type RazorpayOptions = {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+  prefill?: {
+    name?: string;
+    email?: string;
+    contact?: string;
+  };
+  handler: (response: RazorpayResponse) => void;
+  modal?: {
+    ondismiss?: () => void;
+  };
+  theme?: {
+    color?: string;
+  };
+};
+
+type RazorpayInstance = {
+  open: () => void;
+};
+
+type RazorpayConstructor = new (options: RazorpayOptions) => RazorpayInstance;
+
+const getRazorpayConstructor = () =>
+  (window as Window & { Razorpay?: RazorpayConstructor }).Razorpay;
+
+const GST_RATE = 0.18;
+
+const SERVICES: Service[] = [
+  {
+    id: "email",
+    title: "AI Email Automation",
+    description: "Smart replies, routing, and response workflows.",
+    price: 499,
+    icon: Mail,
+  },
+  {
+    id: "whatsapp",
+    title: "WhatsApp Automation",
+    description: "Automate customer journeys on WhatsApp.",
+    price: 2999,
+    icon: MessageSquare,
+  },
+  {
+    id: "website",
+    title: "Website Development",
+    description: "Fast, conversion-ready business website.",
+    price: 4999,
+    icon: Globe,
+  },
+  {
+    id: "sms",
+    title: "SMS and RCS",
+    description: "Reliable campaigns for reach and reminders.",
+    price: 999,
+    icon: RadioTower,
+  },
+  {
+    id: "marketing",
+    title: "Digital Marketing",
+    description: "Lead generation and growth campaigns.",
+    price: 2999,
+    icon: Sparkles,
+  },
+  {
+    id: "crm",
+    title: "CRM and Lead Management",
+    description: "Centralized pipeline and follow-up tracking.",
+    price: 1999,
+    icon: Users,
+  },
+];
+
+const formatInr = (value: number) => `Rs. ${value.toLocaleString("en-IN")}`;
+
+const loadRazorpay = () =>
+  new Promise<boolean>((resolve) => {
+    if (getRazorpayConstructor()) {
       resolve(true);
       return;
     }
 
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
     script.onload = () => resolve(true);
     script.onerror = () => resolve(false);
     document.body.appendChild(script);
   });
-};
 
-export default function RecommendedPlanPage() {
+export default function RecommendedPlanClient() {
   const router = useRouter();
   const params = useSearchParams();
   const leadId = params.get("lead_id");
 
   const [lead, setLead] = useState<Lead | null>(null);
-  const [selected, setSelected] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [pageLoaded, setPageLoaded] = useState(false);
-
-  /* ================= FETCH LEAD ================= */
-  useEffect(() => {
-    if (!leadId) return;
-
-    fetch("/api/leads/get", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lead_id: leadId }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.success) setLead(data.lead);
-      })
-      .catch(console.error);
-  }, [leadId]);
+  const [selected, setSelected] = useState<ServiceId[]>([]);
+  const [leadLoading, setLeadLoading] = useState(true);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
 
   useEffect(() => {
-    setPageLoaded(true);
-  }, []);
-
-  /* ================= HELPERS ================= */
-  const toggleService = (id: string) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
-  };
-
-  const selectedServices = SERVICES.filter((s) =>
-    selected.includes(s.id)
-  );
-
-  const subtotal = selectedServices.reduce(
-    (sum, s) => sum + s.price,
-    0
-  );
-  const gst = Math.round(subtotal * GST_RATE);
-  const total = subtotal + gst;
-
-  /* ================= PAY NOW ================= */
-  const payNow = async () => {
-    if (!leadId || selectedServices.length === 0) {
-      alert("Please select at least one service");
+    if (!leadId) {
+      setLeadLoading(false);
       return;
     }
 
-    setLoading(true);
+    const fetchLead = async () => {
+      try {
+        const res = await fetch("/api/leads/get", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lead_id: leadId }),
+        });
+
+        const data = await res.json();
+        if (res.ok && data?.success && data?.lead) {
+          setLead(data.lead as Lead);
+        }
+      } catch {
+        setError("Could not load customer details. You can still continue.");
+      } finally {
+        setLeadLoading(false);
+      }
+    };
+
+    void fetchLead();
+  }, [leadId]);
+
+  const selectedServices = useMemo(
+    () => SERVICES.filter((service) => selected.includes(service.id)),
+    [selected]
+  );
+
+  const subtotal = useMemo(
+    () => selectedServices.reduce((sum, service) => sum + service.price, 0),
+    [selectedServices]
+  );
+
+  const gst = Math.round(subtotal * GST_RATE);
+  const total = subtotal + gst;
+
+  const toggleService = (id: ServiceId) => {
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const payNow = async () => {
+    setError("");
+    setInfo("");
+
+    if (!leadId) {
+      setError("Session expired. Please restart onboarding.");
+      return;
+    }
+
+    if (selectedServices.length === 0) {
+      setError("Select at least one service to continue.");
+      return;
+    }
+
+    const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+    if (!razorpayKey) {
+      setError("Payment is not configured yet. Please contact support.");
+      return;
+    }
+
+    setPaymentLoading(true);
 
     try {
-      /* 1️⃣ CREATE ORDER */
       const startRes = await fetch("/api/checkout/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           lead_id: leadId,
-          services: selectedServices.map((s) => s.id),
+          services: selectedServices.map((service) => service.id),
           subtotal,
           gst,
           total,
@@ -118,366 +249,350 @@ export default function RecommendedPlanPage() {
       });
 
       const startData = await startRes.json();
-      if (!startData.success) throw new Error("Order creation failed");
-
-      /* 2️⃣ LOAD RAZORPAY (CRITICAL FIX) */
-      const razorpayLoaded = await loadRazorpay();
-      if (!razorpayLoaded) {
-        alert("Razorpay SDK failed to load");
-        return;
+      if (!startRes.ok || !startData?.success) {
+        throw new Error("Order creation failed");
       }
 
-      /* 3️⃣ OPEN RAZORPAY */
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      const razorpayLoaded = await loadRazorpay();
+      const Razorpay = getRazorpayConstructor();
+      if (!razorpayLoaded || !Razorpay) {
+        throw new Error("Unable to load payment gateway");
+      }
+
+      const options: RazorpayOptions = {
+        key: razorpayKey,
         amount: startData.amount,
         currency: "INR",
         name: "Vaiket",
         description: "Custom Service Plan",
         order_id: startData.razorpay_order_id,
-
         prefill: {
           name: lead?.name,
           email: lead?.email,
           contact: lead?.phone,
         },
+        handler: async (response) => {
+          try {
+            const verifyRes = await fetch("/api/checkout/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                order_id: startData.order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
 
-        handler: async function (response: any) {
-          alert("RAZORPAY HANDLER CALLED ✅");
+            const verifyData = await verifyRes.json();
+            if (!verifyRes.ok || !verifyData?.success) {
+              throw new Error("Payment verification failed");
+            }
 
-          await fetch("/api/checkout/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              order_id: startData.order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-            }),
-          });
-
-          alert("Payment Successful 🎉");
-          router.push("/thank-you");
+            router.push("/thank-you");
+          } catch {
+            setError("Payment received but verification failed. Contact support.");
+          }
         },
-
         modal: {
-          ondismiss: function () {
-            alert("Payment cancelled");
+          ondismiss: () => {
+            setInfo("Payment cancelled. You can continue when ready.");
           },
         },
-
-        theme: { color: "#000000" },
+        theme: {
+          color: "#0f172a",
+        },
       };
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (err) {
-      console.error(err);
-      alert("Payment failed. Try again.");
+      const instance = new Razorpay(options);
+      instance.open();
+    } catch {
+      setError("Payment failed. Please try again.");
     } finally {
-      setLoading(false);
+      setPaymentLoading(false);
     }
   };
 
-  /* ================= GUARD ================= */
   if (!leadId) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center px-4">
-        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md text-center">
-          <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">Invalid Session</h2>
-          <p className="text-gray-600 mb-6">Please restart the onboarding process</p>
+      <main
+        className={`${bodyFont.className} min-h-screen bg-[#0b1220] px-4 py-10 text-slate-100 sm:px-6`}
+      >
+        <div className="mx-auto max-w-lg rounded-3xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur">
+          <h1 className={`${headingFont.className} text-3xl font-extrabold text-white`}>
+            Invalid session
+          </h1>
+          <p className="mt-3 text-slate-300">
+            We could not find your onboarding details.
+          </p>
           <button
             onClick={() => router.push("/get-started")}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-300"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-cyan-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-cyan-400"
           >
-            Restart Onboarding
+            Restart onboarding
+            <ArrowRight className="h-4 w-4" />
           </button>
         </div>
-      </div>
+      </main>
     );
   }
 
-  /* ================= UI ================= */
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Your Custom Growth Plan
-              </h1>
-              <p className="text-gray-600">
-                Select the services you need to grow your business
-              </p>
-            </div>
-            <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm text-gray-600">Live prices</span>
-            </div>
+    <main
+      className={`${bodyFont.className} relative min-h-screen overflow-hidden bg-[#0b1220] text-slate-100`}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(20,184,166,0.24),_transparent_36%),radial-gradient(circle_at_top_right,_rgba(59,130,246,0.2),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(245,158,11,0.15),_transparent_35%)]" />
+
+      <section className="relative mx-auto w-full max-w-7xl px-4 py-7 sm:px-6 sm:py-9 lg:px-8 lg:py-12">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-3 rounded-xl border border-white/15 bg-white/10 px-3 py-2 transition hover:border-cyan-300/60 hover:bg-white/15"
+              aria-label="Vaiket Home"
+            >
+              <Image
+                src="/logo/vaiket-premium.svg"
+                alt="Vaiket"
+                width={520}
+                height={140}
+                priority
+                className="h-12 w-auto sm:h-14"
+              />
+              <span className="hidden text-xs font-bold uppercase tracking-[0.18em] text-cyan-100 sm:inline">
+                Recommended Plan
+              </span>
+            </Link>
+            <Link
+              href="/get-started"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-100 transition hover:border-cyan-300/70 hover:text-cyan-200 sm:text-sm"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Back to onboarding
+            </Link>
+          </div>
+
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-200">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            Trusted and secure checkout
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Services Grid - Left Column */}
-          <div className="lg:col-span-2">
-            {/* Trust Banner */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 mb-8 transform transition-all duration-500 hover:shadow-lg">
-              <div className="flex items-start space-x-4">
-                <div className="bg-blue-100 p-3 rounded-xl">
-                  <Shield className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-900 mb-1">Secure Checkout</h3>
-                  <p className="text-gray-700 text-sm">
-                    All payments are encrypted and secure. 256-bit SSL encryption with Razorpay.
-                  </p>
-                </div>
-              </div>
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
+              Recommended Plan
+            </p>
+            <h1 className={`${headingFont.className} mt-2 text-3xl font-extrabold text-white sm:text-4xl`}>
+              Choose your growth services
+            </h1>
+            <p className="mt-2 text-slate-300">
+              Pick the services you need now. You can always add more later.
+            </p>
+          </div>
+
+          {lead && (
+            <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
+              For <span className="font-bold text-white">{lead.name}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr] xl:gap-8">
+          <div className="space-y-5">
+            <div className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-sm text-cyan-100">
+              Prices shown are monthly. Taxes are calculated at checkout.
             </div>
 
-            {/* Services Grid */}
-            <div 
-              className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 transition-all duration-700 ${
-                pageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-              }`}
-            >
-              {SERVICES.map((service, index) => {
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {SERVICES.map((service) => {
                 const active = selected.includes(service.id);
+                const Icon = service.icon;
+
                 return (
-                  <div
+                  <button
                     key={service.id}
-                    className={`relative border-2 rounded-2xl p-6 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer ${
-                      active 
-                        ? 'border-blue-500 bg-blue-50 shadow-md' 
-                        : 'border-gray-200 hover:border-blue-300'
-                    }`}
+                    type="button"
                     onClick={() => toggleService(service.id)}
-                    style={{ 
-                      animationDelay: `${index * 100}ms`,
-                      animation: pageLoaded ? `fadeInUp 0.6s ease-out ${index * 0.1}s both` : 'none'
-                    }}
+                    className={`group relative rounded-2xl border p-5 text-left transition ${
+                      active
+                        ? "border-cyan-400 bg-cyan-400/10 shadow-[0_12px_40px_-24px_rgba(34,211,238,0.9)]"
+                        : "border-white/10 bg-white/5 hover:border-cyan-300/70 hover:bg-white/10"
+                    }`}
                   >
                     {active && (
-                      <div className="absolute -top-2 -right-2 bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center animate-bounce">
-                        <Check className="w-5 h-5" />
-                      </div>
+                      <span className="absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400 text-slate-900">
+                        <Check className="h-4 w-4" />
+                      </span>
                     )}
-                    
-                    <div className="text-3xl mb-4">{service.icon}</div>
-                    <h3 className="font-semibold text-gray-900 mb-3 text-lg">{service.title}</h3>
-                    <div className="flex items-baseline mb-4">
-                      <span className="text-2xl font-bold text-gray-900">₹{service.price}</span>
-                      <span className="text-gray-500 text-sm ml-2">/month</span>
+
+                    <div className="mb-4 inline-flex rounded-xl border border-white/10 bg-white/10 p-2.5">
+                      <Icon className="h-5 w-5 text-cyan-200" />
                     </div>
-                    
-                    <div className={`py-3 px-4 rounded-xl text-center font-medium transition-all duration-300 ${
-                      active 
-                        ? 'bg-blue-100 text-blue-700' 
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}>
-                      {active ? "Selected ✓" : "Add to Plan"}
+
+                    <h3 className="text-base font-extrabold text-white">{service.title}</h3>
+                    <p className="mt-2 min-h-10 text-sm text-slate-300">{service.description}</p>
+
+                    <div className="mt-4 flex items-end justify-between gap-2">
+                      <div>
+                        <p className="text-xl font-extrabold text-white">{formatInr(service.price)}</p>
+                        <p className="text-xs font-semibold text-slate-400">per month</p>
+                      </div>
+
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-bold ${
+                          active
+                            ? "bg-cyan-300 text-slate-900"
+                            : "bg-white/10 text-slate-200"
+                        }`}
+                      >
+                        {active ? "Selected" : "Select"}
+                      </span>
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
-
-            {/* Payment Summary Card */}
-            {selectedServices.length > 0 && (
-              <div className={`bg-white border-2 border-gray-200 rounded-2xl p-8 shadow-lg transform transition-all duration-500 ${
-                pageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-              }`}>
-                <h3 className="text-xl font-bold text-gray-900 mb-6">Payment Summary</h3>
-                
-                <div className="space-y-4 mb-8">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium">₹{subtotal}</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">GST (18%)</span>
-                    <span className="font-medium">₹{gst}</span>
-                  </div>
-                  
-                  <div className="border-t border-gray-200 pt-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-bold text-gray-900">Total Payable</span>
-                      <div className="text-right">
-                        <div className="text-3xl font-bold text-gray-900">₹{total}</div>
-                        <div className="text-sm text-gray-500">Inclusive of all taxes</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={payNow}
-                  disabled={loading}
-                  className={`w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed ${
-                    loading ? 'animate-pulse' : ''
-                  }`}
-                >
-                  {loading ? (
-                    <span className="flex items-center justify-center">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3"></div>
-                      Processing Payment...
-                    </span>
-                  ) : (
-                    <span className="flex items-center justify-center">
-                      <CreditCard className="mr-3 w-5 h-5" />
-                      Pay Now • ₹{total}
-                    </span>
-                  )}
-                </button>
-
-                <div className="mt-6 text-center">
-                  <p className="text-sm text-gray-500">
-                    By proceeding, you agree to our Terms & Privacy Policy
-                  </p>
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* Customer Details & Selection Summary - Right Column */}
-          <div className="space-y-8">
-            {/* Customer Details Card */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center mb-6">
-                <div className="bg-blue-100 p-2 rounded-lg mr-3">
-                  <Building2 className="w-5 h-5 text-blue-600" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900">Customer Details</h3>
+          <aside className="space-y-4 lg:sticky lg:top-6 lg:h-fit">
+            <div className="rounded-2xl border border-white/10 bg-white/95 p-5 text-slate-900">
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className={`${headingFont.className} text-lg font-extrabold`}>
+                  Billing summary
+                </h2>
+                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
+                  {selectedServices.length} selected
+                </span>
               </div>
 
-              {lead ? (
-                <div className="space-y-4">
-                  <div className="bg-gray-50 p-4 rounded-xl">
-                    <div className="text-sm text-gray-500 mb-1">Full Name</div>
-                    <div className="font-medium text-gray-900">{lead.name}</div>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-xl">
-                    <div className="text-sm text-gray-500 mb-1">Email Address</div>
-                    <div className="font-medium text-gray-900">{lead.email}</div>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-xl">
-                    <div className="text-sm text-gray-500 mb-1">Phone Number</div>
-                    <div className="font-medium text-gray-900">{lead.phone}</div>
-                  </div>
-                </div>
+              {selectedServices.length === 0 ? (
+                <p className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-3 py-4 text-sm text-slate-500">
+                  Select services from the left to build your plan.
+                </p>
               ) : (
-                <div className="animate-pulse space-y-4">
-                  <div className="bg-gray-200 h-12 rounded-xl"></div>
-                  <div className="bg-gray-200 h-12 rounded-xl"></div>
-                  <div className="bg-gray-200 h-12 rounded-xl"></div>
-                </div>
-              )}
-            </div>
-
-            {/* Selected Services Summary */}
-            {selectedServices.length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                <div className="flex items-center mb-6">
-                  <div className="bg-green-100 p-2 rounded-lg mr-3">
-                    <Zap className="w-5 h-5 text-green-600" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900">Selected Services</h3>
-                  <span className="ml-auto bg-blue-100 text-blue-700 text-sm font-medium px-3 py-1 rounded-full">
-                    {selectedServices.length} services
-                  </span>
-                </div>
-
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {selectedServices.map((service) => (
-                    <div 
-                      key={service.id} 
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200"
+                    <div
+                      key={service.id}
+                      className="flex items-start justify-between gap-3 rounded-xl bg-slate-50 px-3 py-2.5"
                     >
-                      <div className="flex items-center">
-                        <span className="text-xl mr-3">{service.icon}</span>
-                        <span className="font-medium text-gray-900">{service.title}</span>
-                      </div>
-                      <span className="font-bold text-gray-900">₹{service.price}</span>
+                      <p className="text-sm font-semibold text-slate-700">{service.title}</p>
+                      <p className="text-sm font-bold text-slate-900">{formatInr(service.price)}</p>
                     </div>
                   ))}
                 </div>
+              )}
 
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <div className="flex justify-between items-center">
-                    <span className="font-bold text-gray-900">Total</span>
-                    <div className="text-right">
-                      <div className="text-xl font-bold text-gray-900">₹{total}</div>
-                      <div className="text-xs text-gray-500">monthly</div>
-                    </div>
-                  </div>
+              <div className="mt-4 space-y-2 border-t border-slate-200 pt-4 text-sm">
+                <div className="flex items-center justify-between text-slate-600">
+                  <span>Subtotal</span>
+                  <span className="font-semibold text-slate-900">{formatInr(subtotal)}</span>
                 </div>
+                <div className="flex items-center justify-between text-slate-600">
+                  <span>GST (18%)</span>
+                  <span className="font-semibold text-slate-900">{formatInr(gst)}</span>
+                </div>
+                <div className="flex items-center justify-between border-t border-slate-200 pt-3 text-base font-extrabold text-slate-900">
+                  <span>Total</span>
+                  <span>{formatInr(total)}</span>
+                </div>
+              </div>
+
+              <button
+                onClick={payNow}
+                disabled={paymentLoading || selectedServices.length === 0}
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-extrabold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {paymentLoading ? (
+                  <>
+                    <Loader2 className="h-4.5 w-4.5 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="h-4.5 w-4.5" />
+                    Pay now {selectedServices.length > 0 ? `- ${formatInr(total)}` : ""}
+                  </>
+                )}
+              </button>
+
+              <p className="mt-3 text-center text-xs font-semibold text-slate-500">
+                Secure checkout powered by Razorpay
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">
+              <h3 className="mb-2 text-sm font-bold text-white">Customer details</h3>
+
+              {leadLoading ? (
+                <p className="text-slate-300">Loading details...</p>
+              ) : lead ? (
+                <div className="space-y-2">
+                  <p>
+                    <span className="font-semibold text-slate-400">Name:</span> {lead.name}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-slate-400">Email:</span> {lead.email}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-slate-400">Phone:</span> {lead.phone}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-slate-300">Details unavailable</p>
+              )}
+            </div>
+
+            <div className="rounded-2xl border border-emerald-300/25 bg-emerald-300/10 p-4 text-sm text-emerald-100">
+              <p className="inline-flex items-center gap-2 font-semibold">
+                <Lock className="h-4 w-4" />
+                Your payment data is encrypted end-to-end.
+              </p>
+            </div>
+
+            {error && (
+              <div className="rounded-2xl border border-red-300/35 bg-red-300/10 px-4 py-3 text-sm font-semibold text-red-100">
+                {error}
               </div>
             )}
 
-            {/* Payment Security */}
-            <div className="bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 rounded-2xl p-6">
-              <div className="text-center">
-                <div className="flex justify-center space-x-4 mb-4">
-                  <div className="bg-white p-3 rounded-xl shadow-sm">
-                    <span className="text-2xl">🔒</span>
-                  </div>
-                  <div className="bg-white p-3 rounded-xl shadow-sm">
-                    <span className="text-2xl">🛡️</span>
-                  </div>
-                  <div className="bg-white p-3 rounded-xl shadow-sm">
-                    <span className="text-2xl">✓</span>
-                  </div>
-                </div>
-                <h4 className="font-bold text-gray-900 mb-2">Secure Payment</h4>
-                <p className="text-sm text-gray-600">
-                  Powered by Razorpay. Your payment information is encrypted and secure.
-                </p>
+            {info && (
+              <div className="rounded-2xl border border-cyan-300/35 bg-cyan-300/10 px-4 py-3 text-sm font-semibold text-cyan-100">
+                {info}
               </div>
-            </div>
-          </div>
+            )}
+          </aside>
         </div>
-      </div>
+      </section>
 
-      {/* Floating Action Button for Mobile */}
       {selectedServices.length > 0 && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-2xl">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="fixed inset-x-0 bottom-0 z-20 border-t border-white/15 bg-slate-950/95 px-4 py-3 backdrop-blur lg:hidden">
+          <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3">
             <div>
-              <div className="text-sm text-gray-500">Total Payable</div>
-              <div className="text-2xl font-bold text-gray-900">₹{total}</div>
+              <p className="text-xs text-slate-300">Total payable</p>
+              <p className="text-lg font-extrabold text-white">{formatInr(total)}</p>
             </div>
             <button
               onClick={payNow}
-              disabled={loading}
-              className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70"
+              disabled={paymentLoading}
+              className="inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-extrabold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-60"
             >
-              {loading ? "Processing..." : "Pay Now"}
+              {paymentLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Processing
+                </>
+              ) : (
+                <>
+                  Pay now
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
             </button>
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
-    </div>
+    </main>
   );
 }

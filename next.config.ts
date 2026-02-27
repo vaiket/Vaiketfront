@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "wabridge.com",
         pathname: "/_next/static/media/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
 };

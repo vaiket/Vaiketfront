@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     const leadId = randomUUID();
 
-    const { error } = await supabase.from("lead").insert({
+    const { error } = await supabase.from("leads").insert({
       id: leadId,
       name,
       email,

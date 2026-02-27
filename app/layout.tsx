@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import AppFrame from "@/components/AppFrame";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-import Header from "@/components/ui/header-3";
-import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vaiket – AI Chat & Mail Automation",
-  description: "Automate communication & grow sales with AI.",
+  title: "Vaiket - AI Chat and Mail Automation",
+  description: "Automate communication and grow sales with AI.",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   themeColor: "#000000",
 };
@@ -33,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* 🔹 Google Tag Manager */}
+        {/* Google Tag Manager */}
         <Script
           id="gtm-script"
           strategy="afterInteractive"
@@ -48,7 +46,7 @@ export default function RootLayout({
           }}
         />
 
-        {/* 🔹 Facebook Pixel */}
+        {/* Facebook Pixel */}
         <Script
           id="facebook-pixel"
           strategy="afterInteractive"
@@ -78,7 +76,7 @@ export default function RootLayout({
           }}
         />
 
-        {/* 🔹 Google Analytics GA4 */}
+        {/* Google Analytics GA4 */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-YPKY9BHQMS"
           strategy="afterInteractive"
@@ -95,28 +93,14 @@ export default function RootLayout({
             `,
           }}
         />
-
-      
       </head>
 
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col bg-black text-white`}
       >
-        {/* 🔹 Header */}
-        <Header />
+        <AppFrame>{children}</AppFrame>
 
-        {/* ✅ MAIN CONTENT (Mobile-safe) */}
-        <main className="flex-1 w-full overflow-x-hidden">
-          {children}
-        </main>
-
-        {/* 🔹 Noupe Chatbot */}
-        <Script
-          src="https://www.noupe.com/embed/019c305dccd17b379bf1a2354da849cd4a7f.js"
-          strategy="afterInteractive"
-        />
-
-        {/* 🔹 GTM (noscript) */}
+        {/* GTM (noscript) */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5H4CKVX3"
@@ -125,12 +109,8 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-
-      
-
-        {/* 🔹 Footer */}
-        <Footer />
       </body>
     </html>
   );
 }
+

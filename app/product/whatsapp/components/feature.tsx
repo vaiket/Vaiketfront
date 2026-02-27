@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const WhatsAppMarketingHero = () => {
   return (
@@ -140,7 +141,10 @@ const WhatsAppMarketingHero = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center lg:items-start">
-                <button className="group relative bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-4 px-10 rounded-xl text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-green-200/50 transform hover:-translate-y-1 active:scale-[0.98]">
+                <Link
+                  href="/get-started"
+                  className="group relative bg-gradient-to-r from-green-600 to-green-700 px-10 py-4 text-lg font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:from-green-700 hover:to-green-800 hover:shadow-xl hover:shadow-green-200/50 active:scale-[0.98] rounded-xl shadow-lg"
+                >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     Start Free Trial
                     <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,9 +152,12 @@ const WhatsAppMarketingHero = () => {
                     </svg>
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-green-700 to-green-800 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </button>
+                </Link>
                 
-                <button className="group text-gray-700 hover:text-gray-900 font-medium py-4 px-8 rounded-xl text-lg transition-all duration-300 hover:bg-gray-50/80 border border-gray-200 hover:border-gray-300">
+                <Link
+                  href="/resources/demo-booking"
+                  className="group rounded-xl border border-gray-200 px-8 py-4 text-lg font-medium text-gray-700 transition-all duration-300 hover:border-gray-300 hover:bg-gray-50/80 hover:text-gray-900"
+                >
                   <span className="flex items-center justify-center gap-2">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -158,7 +165,7 @@ const WhatsAppMarketingHero = () => {
                     </svg>
                     Watch Demo
                   </span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -183,12 +190,12 @@ const WhatsAppMarketingHero = () => {
                   Set up WhatsApp catalogs easily for products and automate customer browsing and ordering.
                 </p>
                 <div className="mt-8 pt-6 border-t border-gray-100 group-hover:border-green-100 transition-colors duration-300">
-                  <button className="text-green-600 hover:text-green-700 font-medium flex items-center gap-2 transition-colors duration-200">
+                  <Link href="/company/contact-support" className="text-green-600 hover:text-green-700 font-medium flex items-center gap-2 transition-colors duration-200">
                     Learn more
                     <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -207,12 +214,12 @@ const WhatsAppMarketingHero = () => {
                   Customize quick replies, call-to-actions, and rich buttons in WhatsApp chat threads.
                 </p>
                 <div className="mt-8 pt-6 border-t border-gray-100 group-hover:border-green-100 transition-colors duration-300">
-                  <button className="text-green-600 hover:text-green-700 font-medium flex items-center gap-2 transition-colors duration-200">
+                  <Link href="/company/contact-support" className="text-green-600 hover:text-green-700 font-medium flex items-center gap-2 transition-colors duration-200">
                     Learn more
                     <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -231,12 +238,12 @@ const WhatsAppMarketingHero = () => {
                   Build and automate engaging conversations easily with our drag-and-drop chatbot builder.
                 </p>
                 <div className="mt-8 pt-6 border-t border-gray-100 group-hover:border-green-100 transition-colors duration-300">
-                  <button className="text-green-600 hover:text-green-700 font-medium flex items-center gap-2 transition-colors duration-200">
+                  <Link href="/company/contact-support" className="text-green-600 hover:text-green-700 font-medium flex items-center gap-2 transition-colors duration-200">
                     Learn more
                     <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -276,29 +283,6 @@ const WhatsAppMarketingHero = () => {
         
         .animate-float-delayed {
           animation: float-delayed 6s ease-in-out 0.3s infinite;
-        }
-        
-        /* Smooth scrolling */
-        html {
-          scroll-behavior: smooth;
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-          width: 10px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: #f1f1f1;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: #c1c1c1;
-          border-radius: 5px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: #a1a1a1;
         }
       `}</style>
     </div>

@@ -156,4 +156,22 @@ body {
   }
 }
 
+@layer utilities {
+  .vaiket-surface-bg {
+    background-image: radial-gradient(
+      130% 120% at 0% 0%,
+      #d2f8ff 0%,
+      #f6fbff 40%,
+      #fff6e9 70%,
+      #ecfff6 100%
+    );
+  }
+
+  .vaiket-grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+}
 

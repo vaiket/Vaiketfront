@@ -86,6 +86,13 @@ export async function POST(req: Request) {
           .update({ status: "paid" })
           .eq("id", order.lead_id);
       }
+
+      if (order.order_type === "website" && order.request_id) {
+        await supabase
+          .from("website_requests")
+          .update({ status: "success", latest_order_id: order.id })
+          .eq("id", order.request_id);
+      }
     }
 
     /* ================= PAYMENT FAILED ================= */
@@ -94,6 +101,13 @@ export async function POST(req: Request) {
         .from("orders")
         .update({ status: "failed" })
         .eq("id", order.id);
+
+      if (order.order_type === "website" && order.request_id) {
+        await supabase
+          .from("website_requests")
+          .update({ status: "failed" })
+          .eq("id", order.request_id);
+      }
     }
 
     return NextResponse.json({ success: true });

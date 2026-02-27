@@ -3,9 +3,9 @@ import Feature from "./components/feature";
 import Pricing from "./components/pricing";
 
 export const metadata = {
-  title: "WhatsApp Business API | WABridge",
+  title: "WhatsApp Automation | Vaiket",
   description:
-    "Automate your business with WhatsApp Business API & RCS. Send broadcasts, build chatbots, automate workflows, and boost conversions.",
+    "Automate your business with WhatsApp API workflows, broadcasts, chatbots, and conversion-focused follow-ups.",
 };
 
 export default function WhatsAppPage() {

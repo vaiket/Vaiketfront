@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     }
 
     await supabase
-      .from("lead")
+      .from("leads")
       .update({ status })
       .eq("id", lead_id);
 

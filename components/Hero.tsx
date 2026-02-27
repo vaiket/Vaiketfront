@@ -1,447 +1,94 @@
-"use client"
+"use client";
 
-import React, { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/ui/button";
-import Image from "next/image";
-import { ReactNode } from 'react';
-import { motion, Variants } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { Manrope, Sora } from "next/font/google";
+import { ArrowRight } from "lucide-react";
 
-type PresetType =
-  | 'fade'
-  | 'slide'
-  | 'scale'
-  | 'blur'
-  | 'blur-slide'
-  | 'zoom'
-  | 'flip'
-  | 'bounce'
-  | 'rotate'
-  | 'swing';
+import funnelAnimation from "@/app/get-started/animations/customers-near-sales-funnel-cone.json";
 
-type AnimatedGroupProps = {
-  children: ReactNode;
-  className?: string;
-  variants?: {
-    container?: Variants;
-    item?: Variants;
-  };
-  preset?: PresetType;
-};
+const LottieGraphic = dynamic(() => import("lottie-react"), {
+  ssr: false,
+});
 
-const defaultContainerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
+const headingFont = Sora({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+});
 
-const defaultItemVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-};
+const bodyFont = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
 
-const presetVariants: Record<
-  PresetType,
-  { container: Variants; item: Variants }
-> = {
-  fade: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0 },
-      visible: { opacity: 1 },
-    },
-  },
-  slide: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0, y: 20 },
-      visible: { opacity: 1, y: 0 },
-    },
-  },
-  scale: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0, scale: 0.8 },
-      visible: { opacity: 1, scale: 1 },
-    },
-  },
-  blur: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0, filter: 'blur(4px)' },
-      visible: { opacity: 1, filter: 'blur(0px)' },
-    },
-  },
-  'blur-slide': {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0, filter: 'blur(4px)', y: 20 },
-      visible: { opacity: 1, filter: 'blur(0px)', y: 0 },
-    },
-  },
-  zoom: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0, scale: 0.5 },
-      visible: {
-        opacity: 1,
-        scale: 1,
-        transition: { type: "spring" as const, stiffness: 300, damping: 20 },
-      },
-    },
-  },
-  flip: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0, rotateX: -90 },
-      visible: {
-        opacity: 1,
-        rotateX: 0,
-        transition: { type: "spring" as const, stiffness: 300, damping: 20 },
-      },
-    },
-  },
-  bounce: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0, y: -50 },
-      visible: {
-        opacity: 1,
-        y: 0,
-        transition: { type: "spring" as const, stiffness: 400, damping: 10 },
-      },
-    },
-  },
-  rotate: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0, rotate: -180 },
-      visible: {
-        opacity: 1,
-        rotate: 0,
-        transition: { type: "spring" as const, stiffness: 200, damping: 15 },
-      },
-    },
-  },
-  swing: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0, rotate: -10 },
-      visible: {
-        opacity: 1,
-        rotate: 0,
-        transition: { type: "spring" as const, stiffness: 300, damping: 8 },
-      },
-    },
-  },
-};
-
-function AnimatedGroup({
-  children,
-  className,
-  variants,
-  preset,
-}: AnimatedGroupProps) {
-  const selectedVariants = preset
-    ? presetVariants[preset]
-    : { container: defaultContainerVariants, item: defaultItemVariants };
-  const containerVariants = variants?.container || selectedVariants.container;
-  const itemVariants = variants?.item || selectedVariants.item;
-
+export default function Hero() {
   return (
-    <motion.div
-      initial='hidden'
-      animate='visible'
-      variants={containerVariants}
-      className={cn(className)}
+    <section
+      className={`${bodyFont.className} relative isolate overflow-hidden bg-[#f4f9ff] pb-16 pt-10 sm:pb-20 sm:pt-14 lg:pb-24 lg:pt-16`}
     >
-      {React.Children.map(children, (child, index) => (
-        <motion.div key={index} variants={itemVariants}>
-          {child}
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-}
-
-export { AnimatedGroup };
-
-interface AnimatedGradientBackgroundProps {
-   /** 
-    * Initial size of the radial gradient, defining the starting width. 
-    * @default 110
-    */
-   startingGap?: number;
-
-   /**
-    * Enables or disables the breathing animation effect.
-    * @default false
-    */
-   Breathing?: boolean;
-
-   /**
-    * Array of colors to use in the radial gradient.
-    * Each color corresponds to a stop percentage in `gradientStops`.
-    * @default ["#0A0A0A", "#2979FF", "#FF80AB", "#FF6D00", "#FFD600", "#00E676", "#3D5AFE"]
-    */
-   gradientColors?: string[];
-
-   /**
-    * Array of percentage stops corresponding to each color in `gradientColors`.
-    * The values should range between 0 and 100.
-    * @default [35, 50, 60, 70, 80, 90, 100]
-    */
-   gradientStops?: number[];
-
-   /**
-    * Speed of the breathing animation. 
-    * Lower values result in slower animation.
-    * @default 0.02
-    */
-   animationSpeed?: number;
-
-   /**
-    * Maximum range for the breathing animation in percentage points.
-    * Determines how much the gradient "breathes" by expanding and contracting.
-    * @default 5
-    */
-   breathingRange?: number;
-
-   /**
-    * Additional inline styles for the gradient container.
-    * @default {}
-    */
-   containerStyle?: React.CSSProperties;
-
-   /**
-    * Additional class names for the gradient container.
-    * @default ""
-    */
-   containerClassName?: string;
-
-
-   /**
-    * Additional top offset for the gradient container form the top to have a more flexible control over the gradient.
-    * @default 0
-    */
-   topOffset?: number;
-}
-
-/**
- * AnimatedGradientBackground
- *
- * This component renders a customizable animated radial gradient background with a subtle breathing effect.
- * It uses `framer-motion` for an entrance animation and raw CSS gradients for the dynamic background.
- *
- *
- * @param {AnimatedGradientBackgroundProps} props - Props for configuring the gradient animation.
- * @returns JSX.Element
- */
-const AnimatedGradientBackground: React.FC<AnimatedGradientBackgroundProps> = ({
-   startingGap = 125,
-   Breathing = false,
-   gradientColors = [
-      "#0A0A0A",
-      "#2979FF",
-      "#FF80AB",
-      "#FF6D00",
-      "#FFD600",
-      "#00E676",
-      "#3D5AFE"
-   ],
-   gradientStops = [35, 50, 60, 70, 80, 90, 100],
-   animationSpeed = 0.02,
-   breathingRange = 5,
-   containerStyle = {},
-   topOffset = 0,
-   containerClassName = "",
-}) => {
-
-
-
-   // Validation: Ensure gradientStops and gradientColors lengths match
-   if (gradientColors.length !== gradientStops.length) {
-      throw new Error(
-         `GradientColors and GradientStops must have the same length.
-     Received gradientColors length: ${gradientColors.length},
-     gradientStops length: ${gradientStops.length}`
-      );
-   }
-
-   const containerRef = useRef<HTMLDivElement | null>(null);
-
-   useEffect(() => {
-      let animationFrame: number;
-      let width = startingGap;
-      let directionWidth = 1;
-
-      const animateGradient = () => {
-         if (width >= startingGap + breathingRange) directionWidth = -1;
-         if (width <= startingGap - breathingRange) directionWidth = 1;
-
-         if (!Breathing) directionWidth = 0;
-         width += directionWidth * animationSpeed;
-
-         const gradientStopsString = gradientStops
-            .map((stop, index) => `${gradientColors[index]} ${stop}%`)
-            .join(", ");
-
-         const gradient = `radial-gradient(${width}% ${width+topOffset}% at 50% 20%, ${gradientStopsString})`;
-
-         if (containerRef.current) {
-            containerRef.current.style.background = gradient;
-         }
-
-         animationFrame = requestAnimationFrame(animateGradient);
-      };
-
-      animationFrame = requestAnimationFrame(animateGradient);
-
-      return () => cancelAnimationFrame(animationFrame); // Cleanup animation
-   }, [startingGap, Breathing, gradientColors, gradientStops, animationSpeed, breathingRange, topOffset]);
-
-   return (
-      <motion.div
-         key="animated-gradient-background"
-         initial={{
-            opacity: 0,
-            scale: 1.5,
-         }}
-         animate={{
-            opacity: 1,
-            scale: 1,
-            transition: {
-               duration: 2,
-               ease: [0.25, 0.1, 0.25, 1], // Cubic bezier easing
-             },
-         }}
-         className={`absolute inset-0 overflow-hidden ${containerClassName}`}
-      >
-         <div
-            ref={containerRef}
-            style={containerStyle}
-            className="absolute inset-0 transition-transform"
-         />
-      </motion.div>
-   );
-};
-
-
-
-export default function HeroSection_04() {
-  const transitionVariants = {
-    item: {
-      hidden: {
-        opacity: 0,
-        filter: 'blur(12px)',
-        y: 12,
-      },
-      visible: {
-        opacity: 1,
-        filter: 'blur(0px)',
-        y: 0,
-        transition: {
-          duration: 1.5,
-        },
-      },
-    },
-  }
-
-  return (
-    <div className="relative w-full">
-      <AnimatedGradientBackground />
-      <div className="pt-4 pb-10 sm:pt-6 sm:pb-12 text-center">
-        <div className="relative max-w-2xl mx-auto">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl text-white font-bold tracking-tight">
-            Stop Juggling Tools.
-Start Running a Business.
-
-          </h1>
-          <p className="mt-6 text-lg text-white">Vaiket brings your website, marketing, leads, and automation
-into one unified system — so you can run and grow your business.
-
-
-</p>
-          <AnimatedGroup
-            variants={{
-              container: {
-                visible: {
-                  transition: {
-                    staggerChildren: 0.05,
-                    delayChildren: 0.75,
-                  },
-                },
-              },
-            }}
-            className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row">
-            <div
-              key={1}
-              className="bg-foreground/10 rounded-[14px] border p-0.5">
-              <Button
-                asChild
-                size="lg"
-                className="rounded-xl px-5 text-base">
-                <a
-                  href="/get-started"
-               className="text-nowrap">Get Started</a>
-              </Button>
-            </div>
-            <div
-              key={2}
-              className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 rounded-[14px] border p-0.5">
-              <Button
-                asChild
-                size="lg"
-                className="rounded-xl px-5 text-base bg-white text-black hover:bg-black hover:text-white">
-                <a
-                href="https://wa.me/+917004614077"
-                  className="text-nowrap">Talk to an Expert</a>
-              </Button>
-            </div>
-          </AnimatedGroup>
-        </div>
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_10%_10%,rgba(34,211,238,0.24),transparent_34%),radial-gradient(circle_at_88%_14%,rgba(16,185,129,0.16),transparent_30%),radial-gradient(circle_at_72%_85%,rgba(59,130,246,0.16),transparent_32%)]">
+        <div className="absolute -left-16 -top-16 h-72 w-72 rounded-full bg-cyan-300/35 blur-3xl" />
+        <div className="absolute right-0 top-16 h-72 w-72 rounded-full bg-emerald-300/30 blur-3xl" />
+        <div className="absolute -bottom-10 left-1/3 h-80 w-80 rounded-full bg-blue-300/30 blur-3xl" />
       </div>
-      <AnimatedGroup
-        variants={{
-          container: {
-            visible: {
-              transition: {
-                staggerChildren: 0.05,
-                delayChildren: 0.75,
-              },
-            },
-          },
-          ...transitionVariants,
-        }}>
-        <div className="relative -mr-56 overflow-hidden px-2 sm:mr-0">
-          <div
-            aria-hidden
-            className="bg-gradient-to-b to-background absolute inset-0 z-10 from-transparent from-35%"
-          />
-          <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-5xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
-            <Image
-              className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block"
-              src="https://tailark.com/_next/image?url=%2Fmail2.png&w=3840&q=75"
-              alt="app screen"
-              width={2700}
-              height={1440}
-              unoptimized // Optional: Avoid double optimization for already optimized URLs
-            />
-            <Image
-              className="z-2 border-border/25 aspect-15/8 relative rounded-2xl border dark:hidden"
-              src="https://wabridge.com/_next/static/media/grow.4788fe5c.svg"
-              alt="app screen"
-              width={2700}
-              height={1440}
-              unoptimized
-            />
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid min-h-[76vh] items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+          <div>
+            <p className="inline-flex items-center rounded-full border border-cyan-200/85 bg-white/85 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-cyan-800 shadow-sm backdrop-blur">
+              LIMITED BUSINESSES ARE BEING VERIFIED ON VAIKET
+            </p>
+
+            <h1
+              className={`${headingFont.className} mt-6 max-w-2xl text-4xl font-extrabold leading-[1.06] text-slate-950 sm:text-5xl lg:text-[3.45rem]`}
+            >
+              Get your business verified on Vaiket and start receiving customer
+              enquiries
+            </h1>
+
+            <p className="mt-6 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
+              Early businesses on Vaiket are already getting visibility, a
+              verified business certificate, and enquiries from customers
+              searching for their services. Secure your spot before your
+              competitors join.
+            </p>
+
+            <div className="mt-10">
+              <Link
+                href="/business/identity"
+                className="group relative inline-flex h-16 min-w-[320px] items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-r from-cyan-600 via-teal-500 to-cyan-700 px-7 shadow-[0_10px_24px_-16px_rgba(6,182,212,0.58)] transition-transform duration-200 hover:-translate-y-0.5"
+              >
+                <span className="inline-flex items-center gap-2 text-base font-extrabold text-white">
+                  Get Listed Now - Rs. 99 + GST
+                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+              </Link>
+            </div>
+
+            <p className="mt-4 max-w-2xl text-xs font-semibold text-slate-500 sm:text-sm">
+              One-time payment | Lifetime listing access | Includes
+              verification certificate | Enquiries continue after listing |
+              Setup takes only 2 minutes
+            </p>
+          </div>
+
+          <div className="relative">
+            <div className="absolute -inset-8 -z-10 rounded-[3rem] bg-gradient-to-br from-cyan-300/25 via-emerald-200/20 to-blue-300/25 blur-2xl" />
+
+            <div className="relative overflow-hidden rounded-[2rem] border border-cyan-100/80 bg-white/85 p-3 shadow-[0_36px_70px_-35px_rgba(14,116,144,0.45)] backdrop-blur">
+              <div className="relative overflow-hidden rounded-[1.55rem] border border-slate-100 bg-gradient-to-br from-[#f6fcff] via-[#eef8ff] to-[#f5fffb]">
+                <LottieGraphic
+                  animationData={funnelAnimation}
+                  loop={false}
+                  autoplay
+                  className="h-[360px] w-full sm:h-[430px] lg:h-[500px]"
+                  aria-hidden
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </AnimatedGroup>
-    </div>
+      </div>
+    </section>
   );
-};
+}

@@ -18,113 +18,131 @@ import {
 export default function AiEmailAutomationPage() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
-      {/* Hero Section */}
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-16 md:flex-row md:items-center md:py-20">
-          {/* Left */}
-          <div className="flex-1">
-            <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
-              <Sparkles className="h-4 w-4" />
-              AI Email Automation for Growing Businesses
+            {/* Hero Section */}
+      <section className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-emerald-50 via-white to-cyan-50">
+        <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-emerald-200/45 blur-3xl" />
+        <div className="pointer-events-none absolute -right-20 top-12 h-56 w-56 rounded-full bg-cyan-200/45 blur-3xl" />
+
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-[1.04fr_0.96fr] md:py-20 lg:gap-14">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm">
+              <Sparkles className="h-3.5 w-3.5" />
+              AI Email Automation by Vaiket
             </p>
 
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
-              Reply to every customer
-              <span className="block text-emerald-600">
-                in seconds — automatically.
+            <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
+              Convert every inbound email into a
+              <span className="block bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 bg-clip-text text-transparent">
+                fast, on-brand sales response
               </span>
             </h1>
 
-            <p className="mt-4 max-w-xl text-sm md:text-base text-slate-600">
-              Vaiket&apos;s AI Email Automation reads, understands, and replies
-              to your customer emails 24/7 — so you never lose a lead due to
-              late responses again.
+            <p className="mt-5 max-w-xl text-sm leading-6 text-slate-600 md:text-base md:leading-7">
+              Vaiket reads customer intent, drafts accurate replies, routes
+              leads to the right owner, and triggers follow-ups automatically so
+              your team closes more deals with less manual inbox work.
             </p>
 
-            {/* Hero stats */}
-            <div className="mt-6 grid grid-cols-2 gap-4 text-sm md:max-w-md">
-              <StatPill value="3.2×" label="Faster reply time" />
-              <StatPill value="+40%" label="More leads retained" />
-              <StatPill value="92%" label="Lower manual workload" />
-              <StatPill value="24/7" label="AI always-on support" />
+            <div className="mt-6 grid gap-2.5 text-sm sm:grid-cols-2 sm:gap-3 md:max-w-xl">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-emerald-100 bg-white/85 px-3 py-2 text-slate-700">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                Smart auto-replies in seconds
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-lg border border-emerald-100 bg-white/85 px-3 py-2 text-slate-700">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                Human approval for sensitive cases
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-lg border border-emerald-100 bg-white/85 px-3 py-2 text-slate-700">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                Lead tagging and routing built-in
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-lg border border-emerald-100 bg-white/85 px-3 py-2 text-slate-700">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                Works with your current email setup
+              </div>
             </div>
 
-            {/* CTAs */}
+            <div className="mt-8 grid grid-cols-2 gap-3 text-sm md:max-w-md">
+              <StatPill value="3.2x" label="Faster reply time" />
+              <StatPill value="+40%" label="More leads retained" />
+              <StatPill value="92%" label="Lower manual workload" />
+              <StatPill value="24/7" label="AI coverage" />
+            </div>
+
             <div className="mt-8 flex flex-col gap-3 text-sm sm:flex-row sm:items-center">
               <a
                 href="/resources/demo-booking"
-                className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-6 py-3 font-semibold text-white shadow-sm hover:bg-emerald-700"
+                className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-6 py-3 font-semibold text-white shadow-[0_14px_30px_-16px_rgba(5,150,105,0.6)] transition hover:bg-emerald-700"
               >
                 Book a Live Demo
                 <ArrowRight className="ml-2 h-4 w-4" />
               </a>
               <a
                 href="/pricing"
-                className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 font-medium text-slate-800 hover:bg-slate-50"
+                className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 font-medium text-slate-800 transition hover:bg-slate-50"
               >
                 View Pricing
               </a>
             </div>
 
             <p className="mt-3 text-xs text-slate-500">
-              No credit card required • Works with your existing domain email •
-              Setup in under 30 minutes
+              No credit card required - Setup under 30 minutes - Use your
+              existing domain email
             </p>
           </div>
 
-          {/* Right - simple UI mock */}
-          <div className="flex-1">
-            <div className="mx-auto w-full max-w-md rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
-              <div className="mb-3 flex items-center justify-between text-xs text-slate-500">
-                <span className="inline-flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-slate-400" />
-                  Incoming customer email
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-medium text-emerald-700">
-                  <Zap className="h-3 w-3" />
-                  Auto reply by V-AI
-                </span>
-              </div>
+          <div>
+            <div className="mx-auto w-full max-w-lg rounded-3xl border border-emerald-100 bg-white/90 p-4 shadow-[0_28px_70px_-38px_rgba(15,23,42,0.45)] backdrop-blur sm:p-5">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="mb-3 flex items-center justify-between text-xs text-slate-600">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Mail className="h-4 w-4 text-slate-500" />
+                    Inbox intelligence
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-1 font-semibold text-emerald-700">
+                    <Zap className="h-3 w-3" />
+                    Live AI
+                  </span>
+                </div>
 
-              <div className="rounded-xl bg-white p-3 text-xs text-slate-700 shadow-sm">
-                <p className="font-medium text-slate-900">
-                  Subject: Website enquiry — product pricing
-                </p>
-                <p className="mt-2 leading-relaxed">
-                  Hi, I&apos;m interested in your services. Can you share
-                  pricing details and how long onboarding takes?
-                </p>
-              </div>
+                <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+                  <p className="font-semibold text-slate-900">
+                    Subject: Need pricing and onboarding details
+                  </p>
+                  <p className="mt-1.5 leading-relaxed text-slate-600">
+                    Hi team, can you share the monthly plan and onboarding
+                    timeline for a 5-member sales setup?
+                  </p>
+                </div>
 
-              <div className="mt-3 flex items-center justify-center">
-                <ArrowRight className="h-4 w-4 text-slate-400" />
-              </div>
+                <div className="my-3 flex items-center justify-center">
+                  <ArrowRight className="h-4 w-4 text-slate-400" />
+                </div>
 
-              <div className="mt-3 rounded-xl bg-emerald-600/5 p-3 text-xs text-slate-800 border border-emerald-100">
-                <p className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
-                  <Bot className="h-4 w-4" />
-                  V-AI Suggested Reply
-                </p>
-                <p className="mt-2 leading-relaxed">
-                  Hi Rohan, thanks for reaching out 👋. For businesses like
-                  yours, plans start from{" "}
-                  <span className="font-semibold">₹1499/month</span>, and
-                  onboarding usually completes in{" "}
-                  <span className="font-semibold">1–2 working days</span>. We
-                  can also schedule a quick demo to walk you through the
-                  dashboard.
-                </p>
-              </div>
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 p-3 text-xs text-slate-700">
+                  <p className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+                    <Bot className="h-4 w-4" />
+                    AI Suggested Reply
+                  </p>
+                  <p className="mt-1.5 leading-relaxed">
+                    Thanks for reaching out. For a 5-member team, plans start
+                    at <span className="font-semibold">Rs 1499/month</span> and
+                    onboarding is usually completed in{' '}
+                    <span className="font-semibold">1-2 working days</span>.
+                    I can also share a quick demo slot for your team.
+                  </p>
+                </div>
 
-              <div className="mt-3 flex items-center justify-between text-[10px] text-slate-500">
-                <span className="inline-flex items-center gap-1">
-                  <Clock3 className="h-3 w-3" />
-                  Responded in 4 seconds
-                </span>
-                <span className="inline-flex items-center gap-1">
-                  <Users className="h-3 w-3" />
-                  Assigned to Sales
-                </span>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] text-slate-500">
+                  <span className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-2">
+                    <Clock3 className="h-3.5 w-3.5 text-emerald-600" />
+                    Responded in 4 sec
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-2">
+                    <Users className="h-3.5 w-3.5 text-cyan-600" />
+                    Routed to sales
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -150,7 +168,7 @@ export default function AiEmailAutomationPage() {
             <FeatureCard
               icon={<Zap className="h-5 w-5 text-emerald-600" />}
               title="Instant replies, 24/7"
-              description="V-AI reads the email, understands context, and replies in seconds — even at night or on weekends."
+              description="V-AI reads the email, understands context, and replies in seconds - even at night or on weekends."
             />
             <FeatureCard
               icon={<MessageCircle className="h-5 w-5 text-emerald-600" />}
@@ -206,7 +224,7 @@ export default function AiEmailAutomationPage() {
             </h2>
             <p className="mt-2 max-w-xl text-sm text-slate-600">
               Whether you&apos;re running a local service, online store, or B2B
-              agency — Vaiket adapts to your workflow.
+              agency - Vaiket adapts to your workflow.
             </p>
           </div>
 
@@ -317,7 +335,7 @@ export default function AiEmailAutomationPage() {
                 />
                 <FAQItem
                   question="How long does setup take?"
-                  answer="Most businesses get their first AI replies running in under 30 minutes. Full optimization usually takes 1–2 days."
+                  answer="Most businesses get their first AI replies running in under 30 minutes. Full optimization usually takes 1-2 days."
                 />
               </div>
             </div>

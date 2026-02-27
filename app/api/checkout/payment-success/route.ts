@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
   if (data) {
     await supabase
-      .from("lead")
+      .from("leads")
       .update({ status: "paid" })
       .eq("id", data.lead_id);
 
