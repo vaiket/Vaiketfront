@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <sitemap>
-    <loc>https://vaiket.com/sitemap-main.xml</loc>
-    <lastmod>2026-02-06</lastmod>
+    <loc>https://www.vaiket.com/sitemap.xml</loc>
+    <lastmod>2026-02-27</lastmod>
   </sitemap>
-
   <sitemap>
-    <loc>https://vaiket.com/sitemap-ai.xml</loc>
-    <lastmod>2026-02-06</lastmod>
+    <loc>https://www.vaiket.com/sitemap-ai.xml</loc>
+    <lastmod>2026-02-27</lastmod>
   </sitemap>
-
 </sitemapindex>

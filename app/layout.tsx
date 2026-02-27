@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import AppFrame from "@/components/AppFrame";
 import { Geist, Geist_Mono } from "next/font/google";
+import { getSeoSiteUrl } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,8 +18,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSeoSiteUrl()),
   title: "Vaiket - AI Chat and Mail Automation",
   description: "Automate communication and grow sales with AI.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "/",
+    title: "Vaiket - AI Chat and Mail Automation",
+    description: "Automate communication and grow sales with AI.",
+    siteName: "Vaiket",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vaiket - AI Chat and Mail Automation",
+    description: "Automate communication and grow sales with AI.",
+  },
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   themeColor: "#000000",
   icons: {

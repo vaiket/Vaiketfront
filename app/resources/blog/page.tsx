@@ -1,11 +1,30 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
 import { BLOG_POSTS } from "@/lib/blog-posts";
+import { toAbsoluteUrl } from "@/lib/seo";
 
-export const metadata = {
-  title: "Blog | Vaiket",
-  description:
-    "Read the latest Vaiket insights on business growth, AI automation, and lead conversion.",
+const BLOG_TITLE = "Business Growth and Automation Blog";
+const BLOG_DESCRIPTION =
+  "Read the latest Vaiket insights on business growth, AI automation, and lead conversion.";
+
+export const metadata: Metadata = {
+  title: `${BLOG_TITLE} | Vaiket`,
+  description: BLOG_DESCRIPTION,
+  alternates: {
+    canonical: "/resources/blog",
+  },
+  openGraph: {
+    type: "website",
+    url: "/resources/blog",
+    title: BLOG_TITLE,
+    description: BLOG_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: BLOG_TITLE,
+    description: BLOG_DESCRIPTION,
+  },
 };
 
 function formatDate(value: string) {
@@ -17,15 +36,32 @@ function formatDate(value: string) {
 }
 
 export default function BlogPage() {
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Vaiket Blog Posts",
+    itemListElement: BLOG_POSTS.map((post, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: post.title,
+      url: toAbsoluteUrl(`/resources/blog/${post.slug}`),
+    })),
+  };
+
   return (
     <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+
       <section className="border-b border-slate-200 bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-900 px-4 py-14 text-white md:px-6">
         <div className="mx-auto w-full max-w-5xl">
           <p className="inline-flex rounded-full border border-cyan-300/35 bg-cyan-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-100">
             Vaiket Resources
           </p>
           <h1 className="mt-4 text-3xl font-extrabold leading-tight md:text-5xl md:leading-[1.05]">
-            Business Growth and Automation Blog
+            {BLOG_TITLE}
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-200 md:text-base">
             Explore practical articles focused on trust, faster response systems, and automation
@@ -81,4 +117,3 @@ export default function BlogPage() {
     </div>
   );
 }
-

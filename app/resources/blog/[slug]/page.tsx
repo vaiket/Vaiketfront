@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Calendar, Clock, User } from "lucide-react";
 import { BLOG_POSTS, getBlogPostBySlug } from "@/lib/blog-posts";
+import { toAbsoluteUrl } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -14,6 +15,10 @@ function formatDate(value: string) {
     month: "long",
     year: "numeric",
   });
+}
+
+function toIsoDate(value: string) {
+  return new Date(`${value}T00:00:00.000Z`).toISOString();
 }
 
 export function generateStaticParams() {
@@ -28,12 +33,35 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: "Blog Not Found | Vaiket",
       description: "The requested blog article was not found.",
+      alternates: {
+        canonical: "/resources/blog",
+      },
     };
   }
+
+  const articlePath = `/resources/blog/${post.slug}`;
 
   return {
     title: `${post.title} | Vaiket Blog`,
     description: post.excerpt,
+    alternates: {
+      canonical: articlePath,
+    },
+    openGraph: {
+      type: "article",
+      url: articlePath,
+      title: post.title,
+      description: post.excerpt,
+      publishedTime: toIsoDate(post.publishedAt),
+      modifiedTime: toIsoDate(post.publishedAt),
+      section: post.category,
+      authors: [post.author],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+    },
   };
 }
 
@@ -45,10 +73,59 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
+  const articleUrl = toAbsoluteUrl(`/resources/blog/${post.slug}`);
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: toIsoDate(post.publishedAt),
+    dateModified: toIsoDate(post.publishedAt),
+    author: {
+      "@type": "Organization",
+      name: post.author,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Vaiket",
+      logo: {
+        "@type": "ImageObject",
+        url: toAbsoluteUrl("/logo/vaiket-premium.svg"),
+      },
+    },
+    mainEntityOfPage: articleUrl,
+    url: articleUrl,
+    articleSection: post.category,
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Resources",
+        item: toAbsoluteUrl("/resources/blog"),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: post.title,
+        item: articleUrl,
+      },
+    ],
+  };
+
   const otherPosts = BLOG_POSTS.filter((item) => item.slug !== post.slug).slice(0, 2);
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([articleSchema, breadcrumbSchema]) }}
+      />
+
       <section className={`bg-gradient-to-br px-4 py-14 text-white md:px-6 ${post.coverClassName}`}>
         <div className="mx-auto w-full max-w-4xl">
           <Link
@@ -149,4 +226,3 @@ export default async function BlogPostPage({ params }: PageProps) {
     </div>
   );
 }
-
