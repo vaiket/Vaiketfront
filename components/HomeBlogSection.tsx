@@ -4,7 +4,7 @@ import { ArrowRight, Calendar, Clock, Tag } from "lucide-react";
 
 const featuredPosts = [
   {
-    slug: "custom-email-for-business",
+    slug: "why-every-business-needs-custom-email",
     title: "Why Every Business Needs a Custom Email",
     excerpt:
       "Build trust quickly with a branded email identity that improves replies and conversions.",
@@ -14,7 +14,7 @@ const featuredPosts = [
     image: "/01.jpg",
   },
   {
-    slug: "ai-sales-email",
+    slug: "how-ai-can-increase-sales-from-email",
     title: "How AI Can Increase Sales from Email",
     excerpt:
       "Use AI-assisted replies and follow-ups to close leads faster without increasing team load.",
@@ -24,7 +24,7 @@ const featuredPosts = [
     image: "/05.jpg",
   },
   {
-    slug: "stop-losing-leads",
+    slug: "stop-losing-leads-because-of-late-replies",
     title: "Stop Losing Leads Because of Late Replies",
     excerpt:
       "Set response workflows that keep your pipeline active and prevent lead drop-off.",
@@ -123,7 +123,7 @@ export default function HomeBlogSection() {
                   </div>
 
                   <Link
-                    href="/resources/blog"
+                    href={`/resources/blog/${post.slug}`}
                     className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-300 transition hover:text-cyan-200"
                   >
                     Read more

@@ -93,6 +93,36 @@ const socialLinks: SocialLink[] = [
   { icon: MessageSquare, href: "https://wa.me/+917004614077", label: "WhatsApp" },
 ];
 
+const complianceBadges = [
+  {
+    src: "/badges/mca-incorporation-badge.png",
+    alt: "MCA incorporation certification badge",
+    label: "MCA Incorporated",
+    width: 300,
+    height: 300,
+    imageClassName: "h-24 w-24 sm:h-28 sm:w-28",
+    glowClassName: "drop-shadow-[0_10px_28px_rgba(251,191,36,0.28)]",
+  },
+  {
+    src: "/badges/msme-badge.png",
+    alt: "MSME registered badge",
+    label: "MSME Registered",
+    width: 300,
+    height: 300,
+    imageClassName: "h-24 w-24 sm:h-28 sm:w-28",
+    glowClassName: "drop-shadow-[0_10px_28px_rgba(168,85,247,0.28)]",
+  },
+  {
+    src: "/badges/startup-india-badge.png",
+    alt: "Startup India recognized startup badge",
+    label: "Startup India",
+    width: 248,
+    height: 248,
+    imageClassName: "h-24 w-24 sm:h-28 sm:w-28",
+    glowClassName: "drop-shadow-[0_10px_28px_rgba(251,191,36,0.28)]",
+  },
+] as const;
+
 function LinkSection({ title, links }: { title: string; links: SectionLink[] }) {
   return (
     <div>
@@ -226,44 +256,30 @@ const Footer = () => {
           </div>
 
           <div className="md:col-span-2 lg:col-span-8 lg:col-start-5">
-            <div className="ml-0 grid w-full max-w-3xl grid-cols-3 items-start justify-items-center gap-x-2 gap-y-4 sm:gap-x-6 lg:ml-auto lg:gap-x-8">
-              <div className="flex w-full flex-col items-center gap-2 text-center">
-                <Image
-                  src="/badges/mca-incorporation-badge.png"
-                  alt="MCA incorporation certification badge"
-                  width={300}
-                  height={300}
-                  className="h-24 w-24 object-contain drop-shadow-[0_10px_32px_rgba(251,191,36,0.26)] sm:h-32 sm:w-32 lg:h-[10.8rem] lg:w-[10.8rem]"
-                />
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-                  MCA Incorporated
-                </p>
-              </div>
-
-              <div className="flex w-full flex-col items-center gap-2 text-center">
-                <Image
-                  src="/badges/msme-badge.png"
-                  alt="MSME registered badge"
-                  width={300}
-                  height={300}
-                  className="h-24 w-24 object-contain drop-shadow-[0_10px_32px_rgba(168,85,247,0.26)] sm:h-32 sm:w-32 lg:h-[10.8rem] lg:w-[10.8rem]"
-                />
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-                  MSME Registered
-                </p>
-              </div>
-
-              <div className="flex w-full flex-col items-center gap-2 text-center">
-                <Image
-                  src="/badges/startup-india-badge.png"
-                  alt="Startup India recognized startup badge"
-                  width={248}
-                  height={248}
-                  className="h-20 w-20 object-contain drop-shadow-[0_10px_32px_rgba(251,191,36,0.26)] sm:h-28 sm:w-28 lg:h-36 lg:w-36"
-                />
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-                  Startup India
-                </p>
+            <div className="ml-0 w-full max-w-3xl rounded-2xl border border-slate-800 bg-slate-900/45 p-4 sm:p-5 lg:ml-auto">
+              <p className="mb-3 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:text-left">
+                Recognition and Compliance
+              </p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {complianceBadges.map((badge) => (
+                  <div
+                    key={badge.label}
+                    className="flex min-h-[172px] flex-col items-center justify-between rounded-xl border border-slate-700/70 bg-slate-900/70 px-3 py-3 text-center"
+                  >
+                    <div className="flex h-28 items-center justify-center">
+                      <Image
+                        src={badge.src}
+                        alt={badge.alt}
+                        width={badge.width}
+                        height={badge.height}
+                        className={`w-auto object-contain ${badge.imageClassName} ${badge.glowClassName}`}
+                      />
+                    </div>
+                    <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-300">
+                      {badge.label}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

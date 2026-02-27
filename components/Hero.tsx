@@ -1,15 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
+import Image from "next/image";
 import { Manrope, Sora } from "next/font/google";
 import { ArrowRight } from "lucide-react";
-
-import funnelAnimation from "@/app/get-started/animations/customers-near-sales-funnel-cone.json";
-
-const LottieGraphic = dynamic(() => import("lottie-react"), {
-  ssr: false,
-});
 
 const headingFont = Sora({
   subsets: ["latin"],
@@ -77,12 +71,13 @@ export default function Hero() {
 
             <div className="relative overflow-hidden rounded-[2rem] border border-cyan-100/80 bg-white/85 p-3 shadow-[0_36px_70px_-35px_rgba(14,116,144,0.45)] backdrop-blur">
               <div className="relative overflow-hidden rounded-[1.55rem] border border-slate-100 bg-gradient-to-br from-[#f6fcff] via-[#eef8ff] to-[#f5fffb]">
-                <LottieGraphic
-                  animationData={funnelAnimation}
-                  loop={false}
-                  autoplay
-                  className="h-[360px] w-full sm:h-[430px] lg:h-[500px]"
-                  aria-hidden
+                <Image
+                  src="/hero/list-your-business-proof-v3.png"
+                  alt="Vaiket business listing onboarding and directory proof visual"
+                  width={1024}
+                  height={1024}
+                  priority
+                  className="h-auto w-full"
                 />
               </div>
             </div>

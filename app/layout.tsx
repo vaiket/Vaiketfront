@@ -21,6 +21,11 @@ export const metadata: Metadata = {
   description: "Automate communication and grow sales with AI.",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   themeColor: "#000000",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
